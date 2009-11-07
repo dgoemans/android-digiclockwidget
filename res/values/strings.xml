@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="widget_name">Digi Clock Widget</string>
+    <string name="widget_name_twelve">DigiClock Widget (12hr)</string>
+    <string name="widget_name_twenty_four">DigiClock Widget (24hr)</string>
+    <string name="app_name">Digi Clock Widget</string>
+<string name="time_default">00</string>
+<string name="date_default">Sat, 31 Dec 2009</string>
+<string-array name="days">
+	<item>Sun</item>
+	<item>Mon</item>
+	<item>Tue</item>
+	<item>Wed</item>
+	<item>Thur</item>
+	<item>Fri</item>
+	<item>Sat</item>
+</string-array>
+<string-array name="months">
+	<item>Jan</item>
+	<item>Feb</item>
+	<item>Mar</item>
+	<item>Apr</item>
+	<item>May</item>
+	<item>June</item>
+	<item>July</item>
+	<item>Aug</item>
+	<item>Sept</item>
+	<item>Oct</item>
+	<item>Nov</item>
+	<item>Dec</item>
+</string-array>
+</resources>
