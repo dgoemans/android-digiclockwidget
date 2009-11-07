@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.davidgoemans.simpleClockWidget" android:versionCode="3"
+	android:versionName="1.2">
+	<application android:icon="@drawable/icon" android:label="@string/app_name">
+
+		<receiver android:name=".SimpleClockWidget" android:label="@string/widget_name_twenty_four">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+				android:resource="@xml/widget_clock" />
+		</receiver>
+
+		<receiver android:name=".SimpleClockWidgetTwelve" android:label="@string/widget_name_twelve">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+			</intent-filter>
+			<meta-data android:name="android.appwidget.provider"
+				android:resource="@xml/widget_clock" />
+		</receiver>
+		
+		<service android:name=".SimpleClockUpdateService" />
+		<service android:name=".SimpleClockUpdateServiceTwelve" />
+
+	</application>
+	<uses-sdk android:minSdkVersion="3" />
+    
+    <supports-screens
+          android:largeScreens="true"
+          android:normalScreens="true"
+          android:smallScreens="true"
+          android:anyDensity="true" />
+</manifest>
