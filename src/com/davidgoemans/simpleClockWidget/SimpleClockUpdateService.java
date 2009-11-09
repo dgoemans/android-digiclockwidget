@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.IBinder;
 import android.widget.RemoteViews;
@@ -32,9 +33,24 @@ public class SimpleClockUpdateService extends Service
 		CharSequence[] days = res.getTextArray( R.array.days );
 		CharSequence[] months = res.getTextArray( R.array.months );
 
+		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+		int color = prefs.getInt("colorId", 0);
+
+		int layout = R.layout.main;
+		switch( color )
+		{
+		case 0:
+			layout = R.layout.main;
+			break;
+		case 1:
+			layout = R.layout.white;
+			break;
+		case 2:
+			layout = R.layout.velvet;
+			break;
+		}
 		
-		
-		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.main);
+		RemoteViews views = new RemoteViews(context.getPackageName(), layout);
 
 		Calendar rightNow = Calendar.getInstance();
 		
