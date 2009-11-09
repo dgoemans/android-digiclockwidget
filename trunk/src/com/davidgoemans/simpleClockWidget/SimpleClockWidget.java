@@ -3,6 +3,8 @@ package com.davidgoemans.simpleClockWidget;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -11,6 +13,8 @@ import android.util.Log;
 
 public class SimpleClockWidget extends AppWidgetProvider 
 {
+	public static final String PREFS_NAME = "digiClockPrefs";
+	
     class RunUpdateService extends TimerTask 
     {
     	public Context context = null;    	
@@ -55,6 +59,14 @@ public class SimpleClockWidget extends AppWidgetProvider
  	public void onEnabled(Context context) 
  	{
  		super.onEnabled(context);
+ 		
+ 		AlarmManager alarm = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+ 		
+ 		Intent defineIntent = new Intent(context, SimpleClockUpdateServiceTwelve.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context,0, defineIntent, 0);
+ 		
+ 		alarm.setInexactRepeating( AlarmManager.ELAPSED_REALTIME, 0, 60000, pendingIntent);
+ 		
  		
  		if ( m_serviceTimer != null )
  		{
