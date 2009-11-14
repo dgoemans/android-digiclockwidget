@@ -21,6 +21,7 @@ public class SimpleClockWidget extends AppWidgetProvider
     	
     	public void run() 
     	{
+    		SimpleClockWidget.this.fixServices(context);
    			context.startService(new Intent(context, SimpleClockUpdateService.class));
     	}
     }
@@ -28,9 +29,8 @@ public class SimpleClockWidget extends AppWidgetProvider
     static RunUpdateService m_serviceTask = null;
     static Timer m_serviceTimer = null;
 
-    
- 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
- 	{		
+    public void fixServices(Context context)
+    {
  		if( m_serviceTask == null )
  		{
  			m_serviceTask = new RunUpdateService();
@@ -42,6 +42,11 @@ public class SimpleClockWidget extends AppWidgetProvider
  			m_serviceTimer = new Timer();
  			m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
  		}
+    }
+    
+ 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
+ 	{		
+ 		fixServices(context);
     }
  	
  	@Override
@@ -58,15 +63,7 @@ public class SimpleClockWidget extends AppWidgetProvider
  	@Override
  	public void onEnabled(Context context) 
  	{
- 		super.onEnabled(context);
- 		
- 		AlarmManager alarm = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
- 		
- 		Intent defineIntent = new Intent(context, SimpleClockUpdateServiceTwelve.class);
-        PendingIntent pendingIntent = PendingIntent.getService(context,0, defineIntent, 0);
- 		
- 		alarm.setInexactRepeating( AlarmManager.ELAPSED_REALTIME, 0, 60000, pendingIntent);
- 		
+ 		super.onEnabled(context); 		
  		
  		if ( m_serviceTimer != null )
  		{
@@ -75,7 +72,9 @@ public class SimpleClockWidget extends AppWidgetProvider
  		
  		m_serviceTask = new RunUpdateService();
  		m_serviceTask.context = context;
- 		m_serviceTimer = new Timer();
- 		m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
+		
+		m_serviceTimer = new Timer();
+		m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
  	}
+
 }
