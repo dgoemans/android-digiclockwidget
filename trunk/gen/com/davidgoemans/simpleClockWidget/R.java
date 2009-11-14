@@ -11,21 +11,28 @@ public final class R {
     public static final class array {
         public static final int colors=0x7f060002;
         public static final int days=0x7f060000;
+        public static final int launchers=0x7f060003;
         public static final int months=0x7f060001;
     }
     public static final class attr {
     }
     public static final class drawable {
         public static final int date_bg=0x7f020000;
-        public static final int date_bg_velvet=0x7f020001;
-        public static final int date_bg_white=0x7f020002;
-        public static final int icon=0x7f020003;
-        public static final int widget_bg=0x7f020004;
-        public static final int widget_bg_velvet=0x7f020005;
-        public static final int widget_bg_white=0x7f020006;
-        public static final int widget_half=0x7f020007;
-        public static final int widget_half_velvet=0x7f020008;
-        public static final int widget_half_white=0x7f020009;
+        public static final int date_bg_blue=0x7f020001;
+        public static final int date_bg_pink=0x7f020002;
+        public static final int date_bg_velvet=0x7f020003;
+        public static final int date_bg_white=0x7f020004;
+        public static final int icon=0x7f020005;
+        public static final int widget_bg=0x7f020006;
+        public static final int widget_bg_blue=0x7f020007;
+        public static final int widget_bg_pink=0x7f020008;
+        public static final int widget_bg_velvet=0x7f020009;
+        public static final int widget_bg_white=0x7f02000a;
+        public static final int widget_half=0x7f02000b;
+        public static final int widget_half_blue=0x7f02000c;
+        public static final int widget_half_pink=0x7f02000d;
+        public static final int widget_half_velvet=0x7f02000e;
+        public static final int widget_half_white=0x7f02000f;
     }
     public static final class id {
         public static final int date=0x7f080003;
@@ -34,15 +41,18 @@ public final class R {
         public static final int widget=0x7f080000;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
-        public static final int velvet=0x7f030001;
-        public static final int white=0x7f030002;
+        public static final int blue=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int pink=0x7f030002;
+        public static final int velvet=0x7f030003;
+        public static final int white=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f050003;
-        public static final int date_default=0x7f050006;
+        public static final int date_default=0x7f050007;
+        public static final int launcher_chooser_name=0x7f050005;
         public static final int theme_chooser_name=0x7f050004;
-        public static final int time_default=0x7f050005;
+        public static final int time_default=0x7f050006;
         public static final int widget_name=0x7f050000;
         public static final int widget_name_twelve=0x7f050001;
         public static final int widget_name_twenty_four=0x7f050002;

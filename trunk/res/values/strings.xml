@@ -4,7 +4,8 @@
 	<string name="widget_name_twelve">DigiClock Widget (12hr)</string>
 	<string name="widget_name_twenty_four">DigiClock Widget (24hr)</string>
 	<string name="app_name">Digi Clock Widget</string>
-	<string name="theme_chooser_name">DigiTheme Chooser</string>
+	<string name="theme_chooser_name">DigiClock Settings</string>
+	<string name="launcher_chooser_name">Tap Launches ...</string>
 	<string name="time_default">00</string>
 	<string name="date_default">Sat, 31 Dec 2009</string>
 	<string-array name="days">
@@ -34,5 +35,13 @@
 		<item>Black</item>
 		<item>White</item>
 		<item>Velvet</item>
+		<item>Pink</item>
+		<item>Blue</item>
+	</string-array>
+	<string-array name="launchers">
+		<item>Alarm</item>
+		<item>Calendar</item>
+		<item>Browser</item>
+		<item>Theme Chooser</item>
 	</string-array>
 </resources>

@@ -31,6 +31,7 @@ public class ThemeChooser extends ListActivity
 		{
 			menuEntries.add( colors[i].toString() );
 		}
+		menuEntries.add( getString( R.string.launcher_chooser_name ) );
 		
 		
 		super.onCreate(savedInstanceState);
@@ -44,11 +45,18 @@ public class ThemeChooser extends ListActivity
 		CharSequence[] colors = res.getTextArray( R.array.colors );
 
 		super.onListItemClick(l, v, position, id);
-
-		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
-		SharedPreferences.Editor ed = prefs.edit();
-		ed.putInt("colorId", position );
-		ed.commit();
+		
+		if( position < colors.length )
+		{
+			SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+			SharedPreferences.Editor ed = prefs.edit();
+			ed.putInt("colorId", position );
+			ed.commit();
+		}
+		else
+		{
+			this.startActivity(new Intent(this, LauncherChooser.class));
+		}
 		
 		Log.d("DigiClockWidget", String.valueOf( position ) );
 
