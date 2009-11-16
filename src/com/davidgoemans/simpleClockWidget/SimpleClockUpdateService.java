@@ -104,12 +104,12 @@ public class SimpleClockUpdateService extends Service
         	case 2:
         		try 
         		{
-					defineIntent = Intent.parseUri("http://www.google.com", 0);
-				} 
-        		catch (URISyntaxException e) 
+					getPackageManager().getPackageInfo("com.android.browser", 0);
+					defineIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
+				}
+        		catch (NameNotFoundException e1) 
         		{
-					e.printStackTrace();
-					// WILL NEVER HAPPEN SINCE http://www.google.com IS ALWAYS VALID
+        			Log.d("DigiClock","Browser not found");
 				}
         		break;
         	case 3:
