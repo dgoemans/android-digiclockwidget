@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.davidgoemans.simpleClockWidget" android:versionCode="6"
-	android:versionName="1.4a">
+	package="com.davidgoemans.simpleClockWidget" android:versionCode="7"
+	android:versionName="1.5">
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 
 		<activity
-            android:name=".ThemeChooser"
-            android:label="@string/theme_chooser_name"
+            android:name=".SettingsList"
+            android:label="@string/settings_app"
             android:theme="@android:style/Theme.Dialog" >
 
             <intent-filter>
@@ -14,12 +14,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+		<activity
+            android:name=".ThemeChooser"
+            android:label="@string/theme_chooser_name"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
         
 		<activity
             android:name=".LauncherChooser"
             android:label="@string/launcher_chooser_name"
             android:theme="@android:style/Theme.Dialog" >
-
         </activity>
                 
 		<receiver android:name=".SimpleClockWidget" android:label="@string/widget_name_twenty_four">
@@ -34,8 +39,7 @@
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 			</intent-filter>
-			<meta-data android:name="android.appwidget.provider"
-				android:resource="@xml/widget_clock" />
+			<meta-data android:name="android.appwidget.provider" android:resource="@xml/widget_clock" />
 		</receiver>
 		
 		<service android:name=".SimpleClockUpdateService" />
