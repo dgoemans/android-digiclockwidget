@@ -21,9 +21,29 @@ import android.widget.RemoteViews;
 
 public class SimpleClockUpdateService extends Service 
 {   
+	int prevMinute = -1;
+	int prevColor = -1;
+	String prevLauncher = "";
+	
     @Override
     public void onStart(Intent intent, int startId) 
     {
+    	SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+		int color = prefs.getInt("colorId", 0);
+		String launcherPackage = prefs.getString("launcherPackage", "");
+		
+    	Calendar rightNow = Calendar.getInstance();
+    	int minute = rightNow.get(Calendar.MINUTE);
+    	
+    	if( minute == prevMinute && color == prevColor && launcherPackage == prevLauncher )
+    	{
+    		return;
+    	}
+    	
+    	prevMinute = minute;
+    	prevColor = color;
+    	prevLauncher = launcherPackage;
+    	
         RemoteViews updateViews = buildUpdate(this);
         
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -60,6 +80,9 @@ public class SimpleClockUpdateService extends Service
 		case 4:
 			layout = R.layout.blue;
 			break;
+		case 5:
+			layout = R.layout.red;
+			break;
 		}
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), layout);
@@ -81,42 +104,51 @@ public class SimpleClockUpdateService extends Service
 		
 		
 		int launcherId = prefs.getInt("launcherId", 0);
+		String launcherPackage = prefs.getString("launcherPackage", "");
 		
-        Intent defineIntent = new Intent();
-        
-        switch( launcherId )
-        {
-        	case 0:
-        		defineIntent.setComponent(new ComponentName("com.android.alarmclock", "com.android.alarmclock.AlarmClock"));
-        		break;
-        	case 1:
-        		
-        		try 
-        		{
-					getPackageManager().getPackageInfo("com.htc.calendar", 0);
-					defineIntent.setComponent(new ComponentName("com.htc.calendar","com.htc.calendar.MonthActivity"));
-				} 
-        		catch (NameNotFoundException e1) 
-        		{
-        			defineIntent.setComponent(new ComponentName("com.android.calendar", "com.android.calendar.LaunchActivity"));
-				}
-        		break;
-        	case 2:
-        		try 
-        		{
-					getPackageManager().getPackageInfo("com.android.browser", 0);
-					defineIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
-				}
-        		catch (NameNotFoundException e1) 
-        		{
-        			Log.d("DigiClock","Browser not found");
-				}
-        		break;
-        	case 3:
-        		defineIntent.setComponent(new ComponentName("com.davidgoemans.simpleClockWidget", "com.davidgoemans.simpleClockWidget.ThemeChooser"));
-        		break;
-        }
-       
+		Intent defineIntent;
+		
+		if( launcherPackage.length() != 0 )
+		{
+			defineIntent = getPackageManager().getLaunchIntentForPackage(launcherPackage);
+		}
+		else
+		{
+			defineIntent = new Intent();
+	        switch( launcherId )
+	        {
+	        	case 0:
+	        		defineIntent.setComponent(new ComponentName("com.android.alarmclock", "com.android.alarmclock.AlarmClock"));
+	        		break;
+	        	case 1:
+	        		
+	        		try 
+	        		{
+						getPackageManager().getPackageInfo("com.htc.calendar", 0);
+						defineIntent.setComponent(new ComponentName("com.htc.calendar","com.htc.calendar.MonthActivity"));
+					} 
+	        		catch (NameNotFoundException e1) 
+	        		{
+	        			defineIntent.setComponent(new ComponentName("com.android.calendar", "com.android.calendar.LaunchActivity"));
+					}
+	        		break;
+	        	case 2:
+	        		try 
+	        		{
+						getPackageManager().getPackageInfo("com.android.browser", 0);
+						defineIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
+					}
+	        		catch (NameNotFoundException e1) 
+	        		{
+	        			Log.d("DigiClock","Browser not found");
+					}
+	        		break;
+	        	case 3:
+	        		defineIntent.setComponent(new ComponentName("com.davidgoemans.simpleClockWidget", "com.davidgoemans.simpleClockWidget.ThemeChooser"));
+	        		break;
+	        }
+		}
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0, defineIntent, 0);
         views.setOnClickPendingIntent(R.id.widget, pendingIntent);
         

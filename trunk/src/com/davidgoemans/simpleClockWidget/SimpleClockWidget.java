@@ -9,6 +9,8 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 
 public class SimpleClockWidget extends AppWidgetProvider 
@@ -27,7 +29,8 @@ public class SimpleClockWidget extends AppWidgetProvider
     }
     
     static RunUpdateService m_serviceTask = null;
-    static Timer m_serviceTimer = null;
+	static Timer m_serviceTimer = null;
+
 
     public void fixServices(Context context)
     {
@@ -40,12 +43,12 @@ public class SimpleClockWidget extends AppWidgetProvider
  		if( m_serviceTimer == null )
  		{
  			m_serviceTimer = new Timer();
- 			m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
+ 			m_serviceTimer.schedule(m_serviceTask, 2000, 5000);
  		}
     }
     
  	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
- 	{		
+ 	{	
  		fixServices(context);
     }
  	
@@ -63,7 +66,7 @@ public class SimpleClockWidget extends AppWidgetProvider
  	@Override
  	public void onEnabled(Context context) 
  	{
- 		super.onEnabled(context); 		
+ 		super.onEnabled(context);
  		
  		if ( m_serviceTimer != null )
  		{
@@ -76,5 +79,4 @@ public class SimpleClockWidget extends AppWidgetProvider
 		m_serviceTimer = new Timer();
 		m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
  	}
-
 }

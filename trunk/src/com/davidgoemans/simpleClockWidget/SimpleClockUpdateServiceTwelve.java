@@ -19,20 +19,42 @@ import android.widget.RemoteViews;
 
 public class SimpleClockUpdateServiceTwelve extends Service 
 {   
+	int prevMinute = -1;
+	int prevColor = -1;
+	String prevLauncher = "";
+	
     @Override
     public void onStart(Intent intent, int startId) 
-    {		
+    {
+    	SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+		int color = prefs.getInt("colorId", 0);
+		String launcherPackage = prefs.getString("launcherPackage", "");
+		
+    	Calendar rightNow = Calendar.getInstance();
+    	int minute = rightNow.get(Calendar.MINUTE);
+    	
+    	
+    	if( minute == prevMinute && color == prevColor && launcherPackage == prevLauncher )
+    	{
+    		return;
+    	}
+    	
+    	prevMinute = minute;
+    	prevColor = color;
+    	prevLauncher = launcherPackage;
+    	
         RemoteViews updateViews = buildUpdate(this);
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
         
         // Push update for all sized widgets to home screen       
-        ComponentName thisWidget = new ComponentName(this, SimpleClockWidgetTwelve.class);
+        ComponentName thisWidget = new ComponentName(this, SimpleClockWidgetTwelve.class);        
         manager.updateAppWidget(thisWidget, updateViews);
 
     }
     
 	private RemoteViews buildUpdate(Context context) 
 	{
+		
 		Resources res = getResources();
 		CharSequence[] days = res.getTextArray( R.array.days );
 		CharSequence[] months = res.getTextArray( R.array.months );
@@ -57,6 +79,9 @@ public class SimpleClockUpdateServiceTwelve extends Service
 			break;
 		case 4:
 			layout = R.layout.blue;
+			break;
+		case 5:
+			layout = R.layout.red;
 			break;
 		}
 
@@ -88,41 +113,54 @@ public class SimpleClockUpdateServiceTwelve extends Service
 		views.setTextViewText(R.id.date, String.format("%s, %d %s %d", days[doW], doM, months[month], year) );
 		
 		int launcherId = prefs.getInt("launcherId", 0);
+		String launcherPackage = prefs.getString("launcherPackage", "");
 		
-        Intent defineIntent = new Intent();
+		Intent defineIntent;
+		
+		if( launcherPackage.length() != 0 )
+		{
+			defineIntent = getPackageManager().getLaunchIntentForPackage(launcherPackage);
+		}
+		else
+		{
+			defineIntent = new Intent();
+			
+	        switch( launcherId )
+	        {
+	        	case 0:
+	        		defineIntent.setComponent(new ComponentName("com.android.alarmclock", "com.android.alarmclock.AlarmClock"));
+	        		break;
+	        	case 1:
+	        		
+	        		try 
+	        		{
+						getPackageManager().getPackageInfo("com.htc.calendar", 0);
+						defineIntent.setComponent(new ComponentName("com.htc.calendar","com.htc.calendar.MonthActivity"));
+					}
+	        		catch (NameNotFoundException e1) 
+	        		{
+	        			defineIntent.setComponent(new ComponentName("com.android.calendar", "com.android.calendar.LaunchActivity"));
+					}
+	        		break;
+	        	case 2:
+	        		try 
+	        		{        			
+						getPackageManager().getPackageInfo("com.android.browser", 0);
+						defineIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
+					}
+	        		catch (NameNotFoundException e1) 
+	        		{
+	        			Log.d("DigiClock","Browser not found");
+					}
+	        		break;
+	        	case 3:
+	        		defineIntent.setComponent(new ComponentName("com.davidgoemans.simpleClockWidget", "com.davidgoemans.simpleClockWidget.ThemeChooser"));
+	        		break;
+	        }
+		}
         
-        switch( launcherId )
-        {
-        	case 0:
-        		defineIntent.setComponent(new ComponentName("com.android.alarmclock", "com.android.alarmclock.AlarmClock"));
-        		break;
-        	case 1:
-        		
-        		try 
-        		{
-					getPackageManager().getPackageInfo("com.htc.calendar", 0);
-					defineIntent.setComponent(new ComponentName("com.htc.calendar","com.htc.calendar.MonthActivity"));
-				}
-        		catch (NameNotFoundException e1) 
-        		{
-        			defineIntent.setComponent(new ComponentName("com.android.calendar", "com.android.calendar.LaunchActivity"));
-				}
-        		break;
-        	case 2:
-        		try 
-        		{
-					getPackageManager().getPackageInfo("com.android.browser", 0);
-					defineIntent.setComponent(new ComponentName("com.android.browser","com.android.browser.BrowserActivity"));
-				}
-        		catch (NameNotFoundException e1) 
-        		{
-        			Log.d("DigiClock","Browser not found");
-				}
-        		break;
-        	case 3:
-        		defineIntent.setComponent(new ComponentName("com.davidgoemans.simpleClockWidget", "com.davidgoemans.simpleClockWidget.ThemeChooser"));
-        		break;
-        }
+        
+
         
 
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0, defineIntent, 0);

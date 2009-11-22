@@ -38,7 +38,7 @@ public class SimpleClockWidgetTwelve extends AppWidgetProvider
  		if( m_serviceTimer == null )
  		{
  			m_serviceTimer = new Timer();
- 			m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
+ 			m_serviceTimer.schedule(m_serviceTask, 2000, 5000);
  		}
     }
     
