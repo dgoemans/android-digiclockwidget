@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.davidgoemans.simpleClockWidget" android:versionCode="7"
-	android:versionName="1.5">
+	package="com.davidgoemans.simpleClockWidget" android:versionCode="11"
+	android:versionName="1.8">
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 
 		<activity
@@ -26,6 +26,13 @@
             android:label="@string/launcher_chooser_name"
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        
+        <activity
+            android:name=".DateFormatChooser"
+            android:label="@string/date_format_name"
+            android:theme="@android:style/Theme.Dialog" >
+        </activity>
+        
                 
 		<receiver android:name=".SimpleClockWidget" android:label="@string/widget_name_twenty_four">
 			<intent-filter>

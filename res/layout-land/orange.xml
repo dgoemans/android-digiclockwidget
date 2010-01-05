@@ -6,7 +6,7 @@
 	android:id="@+id/widget"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@drawable/widget_bg_blue"
+    android:background="@drawable/widget_bg_orange"
     >
 
 <TextView  
@@ -42,7 +42,7 @@
     android:layout_alignParentBottom="true"
     android:gravity="center_horizontal"
     style="@style/DateText"
-    android:background="@drawable/date_bg_blue"
+    android:background="@drawable/date_bg_orange"
     />
 
     

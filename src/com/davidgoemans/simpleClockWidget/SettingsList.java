@@ -44,6 +44,7 @@ public class SettingsList extends ListActivity
 		super.onListItemClick(l, v, position, id);
 		boolean finish = true;
 		
+		/*
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage("This option is not done yet, but it's coming soon!\n- The Dev")
 		       .setCancelable(false)
@@ -52,6 +53,7 @@ public class SettingsList extends ListActivity
 		                dialog.cancel();
 		           }
 		       });
+		*/
 		
 		switch( position )
 		{
@@ -62,9 +64,7 @@ public class SettingsList extends ListActivity
 			this.startActivity(new Intent(this, LauncherChooser.class));
 			break;
 		case 2:
-			//this.startActivity(new Intent(this, LauncherChooser.class));
-			builder.show();
-			finish = false;
+			this.startActivity(new Intent(this, DateFormatChooser.class));
 			break;
 		case 3:
 			try 

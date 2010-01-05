@@ -31,8 +31,6 @@ public class ThemeChooser extends ListActivity
 		{
 			menuEntries.add( colors[i].toString() );
 		}
-		menuEntries.add( getString( R.string.launcher_chooser_name ) );
-		
 		
 		super.onCreate(savedInstanceState);
 		setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, menuEntries));		
@@ -53,11 +51,7 @@ public class ThemeChooser extends ListActivity
 			ed.putInt("colorId", position );
 			ed.commit();
 		}
-		else
-		{
-			this.startActivity(new Intent(this, LauncherChooser.class));
-		}
-		
+
 		Log.d("DigiClockWidget", String.valueOf( position ) );
 
 		this.finish();
