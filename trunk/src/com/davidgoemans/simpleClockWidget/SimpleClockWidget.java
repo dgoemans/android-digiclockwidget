@@ -15,6 +15,10 @@ import android.util.Log;
 
 public class SimpleClockWidget extends AppWidgetProvider 
 {
+	
+	public static final int tickTime = 5000;
+	public static final int delayTime = 0;
+	
 	public static final String PREFS_NAME = "digiClockPrefs";
 	
     class RunUpdateService extends TimerTask 
@@ -27,10 +31,17 @@ public class SimpleClockWidget extends AppWidgetProvider
    			context.startService(new Intent(context, SimpleClockUpdateService.class));
     	}
     }
-    
+
     static RunUpdateService m_serviceTask = null;
 	static Timer m_serviceTimer = null;
-
+	
+	@Override
+	public void onReceive(Context context, Intent intent) 
+	{
+		Log.d("DigiClock","Receive");
+		fixServices(context);
+		super.onReceive(context, intent);
+	}
 
     public void fixServices(Context context)
     {
@@ -43,7 +54,7 @@ public class SimpleClockWidget extends AppWidgetProvider
  		if( m_serviceTimer == null )
  		{
  			m_serviceTimer = new Timer();
- 			m_serviceTimer.schedule(m_serviceTask, 2000, 5000);
+ 			m_serviceTimer.schedule(m_serviceTask, delayTime, tickTime);
  		}
     }
     
@@ -53,21 +64,25 @@ public class SimpleClockWidget extends AppWidgetProvider
     }
  	
  	@Override
- 	public void onDisabled(Context context) {
- 		// TODO Auto-generated method stub
- 		super.onDisabled(context);
- 		
+ 	public void onDisabled(Context context) 
+ 	{
+ 		Log.d("DigiClock","Disabled");
  		if ( m_serviceTimer != null )
  		{
  			m_serviceTimer.cancel();
+ 			m_serviceTimer.purge();
+ 			
+ 			m_serviceTimer = null;
+ 			m_serviceTask = null;
  		}
+ 		
+ 		super.onDisabled(context);
  	}
  	
  	@Override
  	public void onEnabled(Context context) 
  	{
- 		super.onEnabled(context);
- 		
+ 		Log.d("DigiClock","Enabled");
  		if ( m_serviceTimer != null )
  		{
  			m_serviceTimer.cancel();
@@ -77,6 +92,8 @@ public class SimpleClockWidget extends AppWidgetProvider
  		m_serviceTask.context = context;
 		
 		m_serviceTimer = new Timer();
-		m_serviceTimer.schedule(m_serviceTask, 2000, 2000);
+		m_serviceTimer.schedule(m_serviceTask, delayTime, tickTime);
+ 		
+ 		super.onEnabled(context);
  	}
 }

@@ -20,25 +20,53 @@ public final class R {
     public static final class drawable {
         public static final int date_bg=0x7f020000;
         public static final int date_bg_blue=0x7f020001;
-        public static final int date_bg_pink=0x7f020002;
-        public static final int date_bg_red=0x7f020003;
-        public static final int date_bg_velvet=0x7f020004;
-        public static final int date_bg_white=0x7f020005;
-        public static final int icon=0x7f020006;
-        public static final int widget_bg=0x7f020007;
-        public static final int widget_bg_blue=0x7f020008;
-        public static final int widget_bg_pink=0x7f020009;
-        public static final int widget_bg_red=0x7f02000a;
-        public static final int widget_bg_velvet=0x7f02000b;
-        public static final int widget_bg_white=0x7f02000c;
-        public static final int widget_half=0x7f02000d;
-        public static final int widget_half_blue=0x7f02000e;
-        public static final int widget_half_pink=0x7f02000f;
-        public static final int widget_half_red=0x7f020010;
-        public static final int widget_half_velvet=0x7f020011;
-        public static final int widget_half_white=0x7f020012;
+        public static final int date_bg_dutch=0x7f020002;
+        public static final int date_bg_ghost=0x7f020003;
+        public static final int date_bg_green=0x7f020004;
+        public static final int date_bg_orange=0x7f020005;
+        public static final int date_bg_pink=0x7f020006;
+        public static final int date_bg_red=0x7f020007;
+        public static final int date_bg_velvet=0x7f020008;
+        public static final int date_bg_white=0x7f020009;
+        public static final int icon=0x7f02000a;
+        public static final int widget_bg=0x7f02000b;
+        public static final int widget_bg_blue=0x7f02000c;
+        public static final int widget_bg_dutch=0x7f02000d;
+        public static final int widget_bg_ghost=0x7f02000e;
+        public static final int widget_bg_green=0x7f02000f;
+        public static final int widget_bg_orange=0x7f020010;
+        public static final int widget_bg_pink=0x7f020011;
+        public static final int widget_bg_red=0x7f020012;
+        public static final int widget_bg_velvet=0x7f020013;
+        public static final int widget_bg_white=0x7f020014;
+        public static final int widget_half=0x7f020015;
+        public static final int widget_half_blue=0x7f020016;
+        public static final int widget_half_dutch=0x7f020017;
+        public static final int widget_half_ghost=0x7f020018;
+        public static final int widget_half_green=0x7f020019;
+        public static final int widget_half_orange=0x7f02001a;
+        public static final int widget_half_pink=0x7f02001b;
+        public static final int widget_half_red=0x7f02001c;
+        public static final int widget_half_velvet=0x7f02001d;
+        public static final int widget_half_white=0x7f02001e;
     }
     public static final class id {
+        public static final int ButtonPanel=0x7f080006;
+        public static final int DateFormatIn=0x7f080005;
+        public static final int DateFormatOut=0x7f080004;
+        public static final int bComma=0x7f080013;
+        public static final int bDD=0x7f08000b;
+        public static final int bDOW=0x7f08000a;
+        public static final int bMM=0x7f08000d;
+        public static final int bMS=0x7f08000c;
+        public static final int bMinus=0x7f080011;
+        public static final int bReset=0x7f080008;
+        public static final int bSave=0x7f080007;
+        public static final int bSlash=0x7f080012;
+        public static final int bSpace=0x7f080010;
+        public static final int bUpdate=0x7f080009;
+        public static final int bYY=0x7f08000e;
+        public static final int bYYYY=0x7f08000f;
         public static final int date=0x7f080003;
         public static final int time_left=0x7f080001;
         public static final int time_right=0x7f080002;
@@ -46,15 +74,30 @@ public final class R {
     }
     public static final class layout {
         public static final int blue=0x7f030000;
-        public static final int main=0x7f030001;
-        public static final int pink=0x7f030002;
-        public static final int red=0x7f030003;
-        public static final int velvet=0x7f030004;
-        public static final int white=0x7f030005;
+        public static final int dateformatchooser=0x7f030001;
+        public static final int dutch=0x7f030002;
+        public static final int ghost=0x7f030003;
+        public static final int green=0x7f030004;
+        public static final int main=0x7f030005;
+        public static final int orange=0x7f030006;
+        public static final int pink=0x7f030007;
+        public static final int red=0x7f030008;
+        public static final int velvet=0x7f030009;
+        public static final int white=0x7f03000a;
     }
     public static final class string {
         public static final int app_name=0x7f050003;
+        public static final int date_day=0x7f05000d;
         public static final int date_default=0x7f050008;
+        /**  Date Formatter Strings 
+         */
+        public static final int date_format_name=0x7f050009;
+        public static final int date_format_reset=0x7f05000b;
+        public static final int date_format_save=0x7f05000a;
+        public static final int date_format_update=0x7f05000c;
+        public static final int date_month=0x7f05000e;
+        public static final int date_seperator=0x7f050010;
+        public static final int date_year=0x7f05000f;
         public static final int launcher_chooser_name=0x7f050006;
         public static final int settings_app=0x7f050004;
         public static final int theme_chooser_name=0x7f050005;

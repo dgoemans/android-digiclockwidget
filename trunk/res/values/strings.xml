@@ -9,6 +9,18 @@
 	<string name="launcher_chooser_name">Tap Launches ...</string>
 	<string name="time_default">00</string>
 	<string name="date_default">Sat, 31 Dec 2009</string>
+	
+	<!-- Date Formatter Strings -->
+	<string name="date_format_name">Date Format</string>
+	<string name="date_format_save">save</string>
+	<string name="date_format_reset">reset</string>
+	<string name="date_format_update">update</string>
+
+	<string name="date_day">Day</string>
+	<string name="date_month">Month</string>
+	<string name="date_year">Year</string>
+	<string name="date_seperator">Seperator</string>
+	
 	<string-array name="days">
 		<item>Sun</item>
 		<item>Mon</item>
@@ -39,6 +51,10 @@
 		<item>Pink</item>
 		<item>Blue</item>
 		<item>Red</item>
+		<item>Green</item>
+		<item>Ghost</item>
+		<item>Going Dutch</item>
+		<item>Orange</item>
 	</string-array>
 	<string-array name="launchers">
 		<item>Alarm</item>
@@ -49,7 +65,7 @@
 	<string-array name="settings">
 		<item>Choose Theme</item>
 		<item>Tap Launches</item>
-		<item>Date Format ( coming soon )</item>
+		<item>Date Format ( Beta )</item>
 		<item>Meet the Dev</item>
 	</string-array>
 </resources>

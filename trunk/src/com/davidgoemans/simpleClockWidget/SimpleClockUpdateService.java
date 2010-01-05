@@ -24,6 +24,7 @@ public class SimpleClockUpdateService extends Service
 	int prevMinute = -1;
 	int prevColor = -1;
 	String prevLauncher = "";
+	String prevDateFormat = "";
 	
     @Override
     public void onStart(Intent intent, int startId) 
@@ -35,7 +36,9 @@ public class SimpleClockUpdateService extends Service
     	Calendar rightNow = Calendar.getInstance();
     	int minute = rightNow.get(Calendar.MINUTE);
     	
-    	if( minute == prevMinute && color == prevColor && launcherPackage == prevLauncher )
+    	String dateFormat = prefs.getString("dateFormat", DateFormatChooser.DefaultFormat);
+    	
+    	if( minute == prevMinute && color == prevColor && launcherPackage == prevLauncher && dateFormat == prevDateFormat )
     	{
     		return;
     	}
@@ -43,6 +46,7 @@ public class SimpleClockUpdateService extends Service
     	prevMinute = minute;
     	prevColor = color;
     	prevLauncher = launcherPackage;
+    	prevDateFormat = dateFormat;
     	
         RemoteViews updateViews = buildUpdate(this);
         
@@ -56,52 +60,28 @@ public class SimpleClockUpdateService extends Service
 	private RemoteViews buildUpdate(Context context) 
 	{
 		Resources res = getResources();
-		CharSequence[] days = res.getTextArray( R.array.days );
-		CharSequence[] months = res.getTextArray( R.array.months );
+
 
 		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		int color = prefs.getInt("colorId", 0);
 
-		int layout = R.layout.main;
-		switch( color )
-		{
-		case 0:
-			layout = R.layout.main;
-			break;
-		case 1:
-			layout = R.layout.white;
-			break;
-		case 2:
-			layout = R.layout.velvet;
-			break;
-		case 3:
-			layout = R.layout.pink;
-			break;
-		case 4:
-			layout = R.layout.blue;
-			break;
-		case 5:
-			layout = R.layout.red;
-			break;
-		}
+		int layout = UpdateFunctions.GetLayoutFromColorId(color);
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), layout);
 
 		Calendar rightNow = Calendar.getInstance();
 		
 		int hour = rightNow.get(Calendar.HOUR_OF_DAY);
-		
 		int min = rightNow.get(Calendar.MINUTE);
 		
-		int doW = rightNow.get(Calendar.DAY_OF_WEEK) - 1;
-		int doM = rightNow.get(Calendar.DAY_OF_MONTH);
-		int month = rightNow.get(Calendar.MONTH);
-		int year = rightNow.get(Calendar.YEAR);
-
 		views.setTextViewText(R.id.time_left, String.format("%02d", hour ) );
 		views.setTextViewText(R.id.time_right, String.format("%02d", min ) );
-		views.setTextViewText(R.id.date, String.format("%s, %d %s %d", days[doW], doM, months[month], year) );
 		
+		String format = prefs.getString("dateFormat", DateFormatChooser.DefaultFormat);
+
+		String outString = UpdateFunctions.GetDateWithFormat(res, format);
+ 
+    	views.setTextViewText(R.id.date, outString );
 		
 		int launcherId = prefs.getInt("launcherId", 0);
 		String launcherPackage = prefs.getString("launcherPackage", "");
