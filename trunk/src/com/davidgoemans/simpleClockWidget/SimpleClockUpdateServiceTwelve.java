@@ -107,7 +107,8 @@ public class SimpleClockUpdateServiceTwelve extends Service
 		
 		if( launcherPackage.length() != 0 )
 		{
-			defineIntent = getPackageManager().getLaunchIntentForPackage(launcherPackage);
+			defineIntent = new Intent(this, Launcher.class);
+			//defineIntent = getPackageManager().getLaunchIntentForPackage(launcherPackage);
 		}
 		else
 		{
