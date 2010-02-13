@@ -8,6 +8,7 @@ import android.R.bool;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,25 +43,13 @@ public class SettingsList extends ListActivity
 	protected void onListItemClick(android.widget.ListView l, android.view.View v, int position, long id )
 	{
 		super.onListItemClick(l, v, position, id);
-		boolean finish = true;
-		
-		/*
-		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("This option is not done yet, but it's coming soon!\n- The Dev")
-		       .setCancelable(false)
-		       .setNegativeButton("Ok", new DialogInterface.OnClickListener() {
-		           public void onClick(DialogInterface dialog, int id) {
-		                dialog.cancel();
-		           }
-		       });
-		*/
 		
 		switch( position )
 		{
 		case 0:
 			this.startActivity(new Intent(this, ThemeChooser.class));
 			break;
-		case 1:
+		case 1:			
 			this.startActivity(new Intent(this, LauncherChooser.class));
 			break;
 		case 2:
@@ -73,13 +62,21 @@ public class SettingsList extends ListActivity
 			} 
 			catch (URISyntaxException e) 
 			{
-				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			break;
+		case 4:
+			try 
+			{
+				this.startActivity( Intent.getIntent( "http://www.davidgoemans.com/mainsite/node/17" ));
+			} 
+			catch (URISyntaxException e) 
+			{
 				e.printStackTrace();
 			}
 			break;
 		}
-
-		if( finish )
-			this.finish();
+		
+		this.finish();
 	}
 }

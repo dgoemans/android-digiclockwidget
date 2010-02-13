@@ -1,7 +1,9 @@
 package com.davidgoemans.simpleClockWidget;
 
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -90,7 +92,8 @@ public class SimpleClockUpdateService extends Service
 		
 		if( launcherPackage.length() != 0 )
 		{
-			defineIntent = getPackageManager().getLaunchIntentForPackage(launcherPackage);
+			defineIntent = new Intent(this, Launcher.class);
+			//getPackageManager().getLaunchIntentForPackage(launcherPackage);
 		}
 		else
 		{

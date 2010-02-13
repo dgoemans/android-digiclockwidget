@@ -67,5 +67,11 @@
 		<item>Tap Launches</item>
 		<item>Date Format ( Beta )</item>
 		<item>Meet the Dev</item>
+		<item>Kit up the Dev</item>
 	</string-array>
+	
+	<string name="load_tap_text">Loading app list</string>
+	<string name="load_tap_title">Loading</string>
+	
+	<string name="launcher_title">Choose your app</string>
 </resources>
