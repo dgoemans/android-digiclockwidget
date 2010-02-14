@@ -55,6 +55,8 @@
 		<item>Ghost</item>
 		<item>Going Dutch</item>
 		<item>Orange</item>
+		<item>Clear - Black</item>
+		<item>Clear - White</item>
 	</string-array>
 	<string-array name="launchers">
 		<item>Alarm</item>

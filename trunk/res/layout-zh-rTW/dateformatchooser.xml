@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:orientation="vertical"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+  
+
+<TextView android:text="週六, 31 十二月 2009" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
+<EditText android:text="dow, dd mm yyyy" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/DateFormatIn" android:gravity="center" android:lines="1" android:minLines="1" android:maxLines="1" android:maxLength="20"></EditText>
+
+
+
+<LinearLayout android:id="@+id/ButtonPanel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSave" android:layout_gravity="left" android:text="@string/date_format_save"></Button>
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bReset" android:text="@string/date_format_reset" android:layout_gravity="center"></Button>
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bUpdate" android:text="@string/date_format_update" android:layout_gravity="right"></Button>
+</LinearLayout>
+
+
+<TableLayout 
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:stretchColumns="1">
+
+	<TableRow>
+	
+	<LinearLayout
+	  android:orientation="vertical"
+	  android:layout_height="fill_parent"
+	  android:layout_width="fill_parent">
+
+		<TextView android:text="@string/date_day" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
+		
+		<LinearLayout 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:orientation="horizontal">
+			<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bDOW" android:text="週六"></Button>
+			<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bDD" android:text="31"></Button>
+		</LinearLayout>
+		
+		<TextView android:text="@string/date_month" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
+		<LinearLayout 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:orientation="horizontal">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMS" android:text="十二月"></Button>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMM" android:text="12"></Button>
+		</LinearLayout>
+
+		<TextView android:text="@string/date_year" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
+		<LinearLayout 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:orientation="horizontal">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bYY" android:text="09"></Button>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bYYYY" android:text="2009"></Button>
+		</LinearLayout>
+
+	</LinearLayout>
+	
+	<LinearLayout
+	  android:orientation="vertical"
+	  android:layout_height="fill_parent"
+	  android:layout_width="fill_parent">
+
+		<TextView android:text="@string/date_seperator" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
+
+		<LinearLayout 
+			android:layout_width="wrap_content" 
+			android:layout_height="wrap_content" 
+			android:orientation="horizontal">
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSpace" android:text="分割"></Button>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMinus" android:text="-"></Button>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSlash" android:text="/"></Button>
+		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bComma" android:text=","></Button>
+		</LinearLayout>
+
+	</LinearLayout>
+	
+	</TableRow>
+	
+</TableLayout>
+
+	
+</LinearLayout>

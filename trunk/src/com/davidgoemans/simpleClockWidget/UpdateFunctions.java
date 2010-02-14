@@ -43,7 +43,13 @@ public class UpdateFunctions
 			break;
 		case 9:
 			layout = R.layout.orange;
-			break;		
+			break;
+		case 10:
+			layout = R.layout.clear_black;
+			break;	
+		case 11:
+			layout = R.layout.clear_white;
+			break;	
 		}
 		
 		return layout;

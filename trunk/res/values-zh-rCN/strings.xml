@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="widget_name">数字时钟小部件</string>
+	<string name="widget_name_twelve">DigiClock 小部件 (12hr)</string>
+	<string name="widget_name_twenty_four">DigiClock 小部件 (24hr)</string>
+	<string name="app_name">数字时钟小部件</string>
+	<string name="settings_app">DigiClock 设置</string>
+	<string name="theme_chooser_name">主题设置</string>
+	<string name="launcher_chooser_name">点击启动 ...</string>
+	<string name="time_default">00</string>
+	<string name="date_default">星期六, 31 12月 2009</string>
+	
+	<!-- Date Formatter Strings -->
+	<string name="date_format_name">日期格式</string>
+	<string name="date_format_save">保存</string>
+	<string name="date_format_reset">重设</string>
+	<string name="date_format_update">更新</string>
+
+	<string name="date_day">天</string>
+	<string name="date_month">月</string>
+	<string name="date_year">年</string>
+	<string name="date_seperator">分隔符</string>
+	
+	<string-array name="days">
+		<item>周日</item>
+		<item>周一</item>
+		<item>周二</item>
+		<item>周三</item>
+		<item>周四</item>
+		<item>周五</item>
+		<item>周六</item>
+	</string-array>
+	<string-array name="months">
+		<item>一月</item>
+		<item>二月</item>
+		<item>三月</item>
+		<item>四月</item>
+		<item>五月</item>
+		<item>六月</item>
+		<item>七月</item>
+		<item>八月</item>
+		<item>九月</item>
+		<item>十月</item>
+		<item>十一月</item>
+		<item>十二月</item>
+	</string-array>
+	<string-array name="colors">
+		<item>黑色</item>
+		<item>白色</item>
+		<item>天鹅</item>
+		<item>粉红</item>
+		<item>蓝色</item>
+		<item>红色</item>
+		<item>绿色</item>
+		<item>幽灵</item>
+		<item>荷兰</item>
+		<item>桔黄</item>
+	</string-array>
+	<string-array name="launchers">
+		<item>闹钟</item>
+		<item>日历</item>
+		<item>浏览器</item>
+		<item>主题颜色</item>
+	</string-array>
+	<string-array name="settings">
+		<item>选择主题</item>
+		<item>点击启动</item>
+		<item>日期格式 ( 测试 )</item>
+		<item>会见开发者</item>
+	</string-array>
+</resources>
