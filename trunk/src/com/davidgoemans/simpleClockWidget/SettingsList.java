@@ -53,9 +53,12 @@ public class SettingsList extends ListActivity
 			this.startActivity(new Intent(this, LauncherChooser.class));
 			break;
 		case 2:
-			this.startActivity(new Intent(this, DateFormatChooser.class));
+			this.startActivity(new Intent(this, TextSettings.class));
 			break;
 		case 3:
+			this.startActivity(new Intent(this, DateFormatChooser.class));
+			break;
+		case 4:
 			try 
 			{
 				this.startActivity( Intent.getIntent( "http://www.davidgoemans.com" ));
@@ -65,7 +68,7 @@ public class SettingsList extends ListActivity
 				e.printStackTrace();
 			}
 			break;
-		case 4:
+		case 5:
 			try 
 			{
 				this.startActivity( Intent.getIntent( "http://www.davidgoemans.com/mainsite/node/17" ));

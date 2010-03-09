@@ -7,6 +7,7 @@
 	<string name="settings_app">DigiClock 设置</string>
 	<string name="theme_chooser_name">主题设置</string>
 	<string name="launcher_chooser_name">点击启动 ...</string>
+	<string name="text_settings_name">Text Settings</string>
 	<string name="time_default">00</string>
 	<string name="date_default">星期六, 31 12月 2009</string>
 	
@@ -15,7 +16,13 @@
 	<string name="date_format_save">保存</string>
 	<string name="date_format_reset">重设</string>
 	<string name="date_format_update">更新</string>
-
+	<string name="date_format_preview">preview</string>
+	<string name="date_format_error">Error</string>
+	
+	<!--  Text Settings Strings -->
+	<string name="text_color">Text Colour</string>
+	<string name="text_leading_zero">Hour Leading Zero</string>
+	
 	<string name="date_day">天</string>
 	<string name="date_month">月</string>
 	<string name="date_year">年</string>
@@ -55,6 +62,10 @@
 		<item>幽灵</item>
 		<item>荷兰</item>
 		<item>桔黄</item>
+		<item>Clear - Black</item>
+		<item>Clear - White</item>
+		<item>Yellow</item>
+		<item>Gold</item>
 	</string-array>
 	<string-array name="launchers">
 		<item>闹钟</item>
@@ -65,7 +76,14 @@
 	<string-array name="settings">
 		<item>选择主题</item>
 		<item>点击启动</item>
+		<item>Text Settings</item>
 		<item>日期格式 ( 测试 )</item>
 		<item>会见开发者</item>
+		<item>Kit up the Dev</item>
 	</string-array>
+	
+	<string name="load_tap_text">Loading app list</string>
+	<string name="load_tap_title">Loading</string>
+	
+	<string name="launcher_title">Choose your app</string>
 </resources>

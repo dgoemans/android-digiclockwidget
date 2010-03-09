@@ -1,6 +1,8 @@
 package com.davidgoemans.simpleClockWidget;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.content.res.Resources;
 
@@ -50,13 +52,35 @@ public class UpdateFunctions
 		case 11:
 			layout = R.layout.clear_white;
 			break;	
+		case 12:
+			layout = R.layout.yellow;
+			break;	
+		case 13:
+			layout = R.layout.gold;
+			break;
 		}
 		
 		return layout;
 	}
 	
-	static String GetDateWithFormat( Resources res, String format )
+	static String convertToNewDateFormat( String format )
 	{
+		String outString = format.replaceAll("dow", "EEE");
+    	outString = outString.replaceAll("mm", "MM");
+    	outString = outString.replaceAll("ms", "MMM");
+    	
+    	return outString;
+	}
+	
+	static String GetDateWithFormat( String format ) throws IllegalArgumentException
+	{
+		String outString = convertToNewDateFormat( format );
+		SimpleDateFormat frmt = new SimpleDateFormat(outString);
+		Date now = new Date();
+		return frmt.format(now);
+		
+		/*
+		
 		CharSequence[] days = res.getTextArray( R.array.days );
 		CharSequence[] months = res.getTextArray( R.array.months );
 
@@ -75,6 +99,6 @@ public class UpdateFunctions
     	outString = outString.replaceAll("yyyy", String.valueOf(year));
     	outString = outString.replaceAll("yy", String.valueOf(year).substring(2));
     	
-    	return outString;
+    	return outString;*/
 	}
 }
