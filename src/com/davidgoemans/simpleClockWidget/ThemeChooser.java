@@ -49,6 +49,7 @@ public class ThemeChooser extends ListActivity
 			SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 			SharedPreferences.Editor ed = prefs.edit();
 			ed.putInt("colorId", position );
+			ed.putBoolean("invalidate", true);
 			ed.commit();
 		}
 

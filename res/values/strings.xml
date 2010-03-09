@@ -7,6 +7,7 @@
 	<string name="settings_app">DigiClock Settings</string>
 	<string name="theme_chooser_name">Theme Chooser</string>
 	<string name="launcher_chooser_name">Tap Launches ...</string>
+	<string name="text_settings_name">Text Settings</string>
 	<string name="time_default">00</string>
 	<string name="date_default">Sat, 31 Dec 2009</string>
 	
@@ -15,6 +16,12 @@
 	<string name="date_format_save">save</string>
 	<string name="date_format_reset">reset</string>
 	<string name="date_format_update">update</string>
+	<string name="date_format_preview">preview</string>
+	<string name="date_format_error">Error</string>
+	
+	<!--  Text Settings Strings -->
+	<string name="text_color">Text Colour</string>
+	<string name="text_leading_zero">Hour Leading Zero</string>
 
 	<string name="date_day">Day</string>
 	<string name="date_month">Month</string>
@@ -30,6 +37,7 @@
 		<item>Fri</item>
 		<item>Sat</item>
 	</string-array>
+	
 	<string-array name="months">
 		<item>Jan</item>
 		<item>Feb</item>
@@ -57,16 +65,21 @@
 		<item>Orange</item>
 		<item>Clear - Black</item>
 		<item>Clear - White</item>
+		<item>Yellow</item>
+		<item>Gold</item>
 	</string-array>
+	
 	<string-array name="launchers">
 		<item>Alarm</item>
 		<item>Calendar</item>
 		<item>Browser</item>
 		<item>Theme Chooser</item>
 	</string-array>
+	
 	<string-array name="settings">
 		<item>Choose Theme</item>
 		<item>Tap Launches</item>
+		<item>Text Settings</item>
 		<item>Date Format ( Beta )</item>
 		<item>Meet the Dev</item>
 		<item>Kit up the Dev</item>

@@ -3,6 +3,7 @@ package com.davidgoemans.simpleClockWidget;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
@@ -27,7 +28,11 @@ public class LauncherChooser extends ListActivity
 	private List<String> menuEntries;
 	private ArrayList<String> packageNames;
 	
+	private TreeMap<String, String> m_packages;
+	
 	public static ProgressDialog progressDialog = null;
+	
+	private int progressTicker;
 	
 	class PackageDesc
 	{
@@ -47,14 +52,25 @@ public class LauncherChooser extends ListActivity
 		protected void onPostExecute(Void result) 
 		{
 			super.onPostExecute(result);
-					
+			
+			Object[] keys = menuEntries.toArray(); //m_packages.keySet().toArray();
+			
 			getListView().invalidate();
+			setListAdapter(new ArrayAdapter<Object>(LauncherChooser.this,android.R.layout.simple_list_item_multiple_choice, keys));
+			getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+			
 			onContentChanged();
+			
 			progressDialog.dismiss();
-			
 			setSelected();
-			
 		}
+		
+		/*@Override
+		protected void onProgressUpdate(Void... values) 
+		{
+			progressDialog.setProgress(progressTicker);
+			super.onProgressUpdate(values);
+		}*/
 
 		@Override
 		protected Void doInBackground(Void... params) 
@@ -82,10 +98,11 @@ public class LauncherChooser extends ListActivity
 		menuEntries = new ArrayList<String>();
 		packageNames = new ArrayList<String>();
 		
+		m_packages = new TreeMap<String, String>();
+		
 		new FillListTask().execute();
 		
-		setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_multiple_choice, menuEntries));
-		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
+		
 		
 		super.onCreate(savedInstanceState);
 	}
@@ -93,7 +110,7 @@ public class LauncherChooser extends ListActivity
 	
 	private void populateList()
 	{
-		List<PackageInfo> packages = getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
+		List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
 		progressDialog.setMax(packages.size());
 		
 		int count = 0;
@@ -107,18 +124,24 @@ public class LauncherChooser extends ListActivity
 			
 			if( intent != null )
 			{
+				String curName;
 				try
 				{
-					menuEntries.add( getPackageManager().getApplicationLabel(cur.applicationInfo).toString() );
+					curName = getPackageManager().getApplicationLabel(cur.applicationInfo).toString();
+					menuEntries.add( curName );
 				}
 				catch(Exception e)
 				{
-					menuEntries.add( cur.packageName );
+					curName = cur.packageName;
+					menuEntries.add( curName );
 				}
 				packageNames.add(cur.packageName);
+				
+				m_packages.put(curName, cur.packageName);
 			}
 			
-			progressDialog.setProgress(count);
+			progressTicker = count;
+			progressDialog.setProgress(progressTicker);
 
 			count++;
 		}
@@ -163,7 +186,7 @@ public class LauncherChooser extends ListActivity
 	}
 	
 	@Override
-	protected void onDestroy() 
+	protected void onPause() 
 	{
 		SparseBooleanArray positions = getListView().getCheckedItemPositions();
 		ArrayList<PackageDesc> selectedPackages = new ArrayList<PackageDesc>();
@@ -196,9 +219,10 @@ public class LauncherChooser extends ListActivity
 			}
 		}
 		
+		ed.putBoolean("invalidate", true);
 		ed.commit();
 		
-		super.onDestroy();
+		super.onPause();
 	}
 	
 	@Override

@@ -1,7 +1,9 @@
 package com.davidgoemans.simpleClockWidget;
 
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -13,6 +15,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -28,22 +31,23 @@ public class SimpleClockUpdateServiceTwelve extends Service
     public void onStart(Intent intent, int startId) 
     {
     	SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
-		int color = prefs.getInt("colorId", 0);
-		String launcherPackage = prefs.getString("launcherPackage", "");
 		
     	Calendar rightNow = Calendar.getInstance();
     	int minute = rightNow.get(Calendar.MINUTE);
     	
-    	String dateFormat = prefs.getString("dateFormat", DateFormatChooser.DefaultFormat);
+    	boolean invalidated = prefs.getBoolean("invalidate", false);
     	
-    	if( minute == prevMinute && color == prevColor && launcherPackage == prevLauncher  && dateFormat == prevDateFormat )
+    	if( minute == prevMinute && !invalidated )
     	{
     		return;
     	}
-    	
+		
+    	SharedPreferences.Editor ed = prefs.edit();		
+		ed.putBoolean("invalidate", false);
+		ed.commit();
+
+		
     	prevMinute = minute;
-    	prevColor = color;
-    	prevLauncher = launcherPackage;
     	
         RemoteViews updateViews = buildUpdate(this);
         AppWidgetManager manager = AppWidgetManager.getInstance(this);
@@ -67,7 +71,21 @@ public class SimpleClockUpdateServiceTwelve extends Service
 		int layout = UpdateFunctions.GetLayoutFromColorId(color);
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), layout);
-
+		
+		int textColor = prefs.getInt("textColor", -1);
+		if( textColor != -1 )
+		{
+			views.setTextColor(R.id.date, textColor);
+			views.setTextColor(R.id.time_left, textColor);
+			views.setTextColor(R.id.time_right, textColor);
+			
+			// The ones with the Colon
+			if( color == 10 || color == 11 )
+			{
+				views.setTextColor(R.id.time_sep, textColor);
+			}
+		}
+		
 		Calendar rightNow = Calendar.getInstance();
 		
 		int hour = rightNow.get(Calendar.HOUR_OF_DAY);
@@ -84,7 +102,15 @@ public class SimpleClockUpdateServiceTwelve extends Service
 		
 		int min = rightNow.get(Calendar.MINUTE);
 		
-		views.setTextViewText(R.id.time_left, String.format("%02d", hour ) );
+		if(prefs.getBoolean("leadingZero", true))
+		{
+			views.setTextViewText(R.id.time_left, String.format("%02d", hour ) );
+		}
+		else
+		{
+			views.setTextViewText(R.id.time_left, String.format("%d", hour ) );
+		}
+		
 		views.setTextViewText(R.id.time_right, String.format("%02d", min ) );
 		
 		String format = prefs.getString("dateFormat", DateFormatChooser.DefaultFormat);
@@ -96,8 +122,8 @@ public class SimpleClockUpdateServiceTwelve extends Service
     	outString = outString.replaceAll("yyyy", String.valueOf(year));
     	outString = outString.replaceAll("yy", String.valueOf(year).substring(2));*/
 		
-		String outString = UpdateFunctions.GetDateWithFormat(res, format);
-		
+		String outString = UpdateFunctions.GetDateWithFormat(format);
+
     	views.setTextViewText(R.id.date, outString );
 		
 		int launcherId = prefs.getInt("launcherId", 0);

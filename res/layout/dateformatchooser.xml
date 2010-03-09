@@ -1,87 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:orientation="vertical"
-  android:layout_width="fill_parent"
-  android:layout_height="fill_parent">
-  
-
-<TextView android:text="Sat, 31 Dec 2009" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
-<EditText android:text="dow, dd mm yyyy" android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/DateFormatIn" android:gravity="center" android:lines="1" android:minLines="1" android:maxLines="1" android:maxLength="20"></EditText>
 
 
+<LinearLayout android:id="@+id/LinearLayout01" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android" android:orientation="vertical">
 
-<LinearLayout android:id="@+id/ButtonPanel" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal">
-	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSave" android:layout_gravity="left" android:text="@string/date_format_save"></Button>
-	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bReset" android:text="@string/date_format_reset" android:layout_gravity="center"></Button>
-	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bUpdate" android:text="@string/date_format_update" android:layout_gravity="right"></Button>
+<LinearLayout android:id="@+id/LinearLayout02" android:layout_height="wrap_content" android:orientation="vertical" android:layout_width="fill_parent">
+	<TextView android:layout_height="wrap_content" android:layout_width="fill_parent" android:gravity="center" android:id="@+id/outDate" android:text="..."></TextView>
+	<EditText android:layout_height="wrap_content" android:layout_width="fill_parent" android:id="@+id/inDate" android:text="ENTER PATTERN"></EditText>
+</LinearLayout>
+
+<LinearLayout android:id="@+id/LinearLayout04" android:layout_height="wrap_content" android:layout_width="fill_parent">
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/date_format_reset" android:id="@+id/btnReset"></Button>
+	<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/date_format_preview" android:id="@+id/btnPreview"></Button>
+</LinearLayout>
+
+<LinearLayout android:id="@+id/LinearLayout03" android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal" android:padding="5dip">
+	<TextView android:id="@+id/TextView02" android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left" android:text="yy / yyyy" android:width="120dip"></TextView>
+	<TextView android:id="@+id/TextView03" android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/date_year"></TextView>
+</LinearLayout><LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal" android:padding="5dip" android:id="@+id/LinearLayout05">
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left" android:id="@+id/TextView04" android:text="M / MM / MMM" android:width="120dip"></TextView>
+	<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/TextView05" android:text="@string/date_month"></TextView>
+</LinearLayout><LinearLayout android:layout_height="wrap_content" android:layout_width="fill_parent" android:orientation="horizontal" android:padding="5dip" android:id="@+id/LinearLayout06">
+	<TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:gravity="left" android:id="@+id/TextView06" android:width="120dip" android:text="d / dd / E"></TextView>
+	<TextView android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/date_day" android:id="@+id/TextView07"></TextView>
 </LinearLayout>
 
 
-<TableLayout 
-	android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:stretchColumns="1">
-
-	<TableRow>
-	
-	<LinearLayout
-	  android:orientation="vertical"
-	  android:layout_height="fill_parent"
-	  android:layout_width="fill_parent">
-
-		<TextView android:text="@string/date_day" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
-		
-		<LinearLayout 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:orientation="horizontal">
-			<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bDOW" android:text="Sat"></Button>
-			<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bDD" android:text="31"></Button>
-		</LinearLayout>
-		
-		<TextView android:text="@string/date_month" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
-		<LinearLayout 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:orientation="horizontal">
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMS" android:text="Dec"></Button>
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMM" android:text="12"></Button>
-		</LinearLayout>
-
-		<TextView android:text="@string/date_year" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
-		<LinearLayout 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:orientation="horizontal">
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bYY" android:text="09"></Button>
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bYYYY" android:text="2009"></Button>
-		</LinearLayout>
-
-	</LinearLayout>
-	
-	<LinearLayout
-	  android:orientation="vertical"
-	  android:layout_height="fill_parent"
-	  android:layout_width="fill_parent">
-
-		<TextView android:text="@string/date_seperator" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/DateFormatOut" android:paddingTop="5dip" android:paddingBottom="5dip" android:paddingLeft="5dip" android:paddingRight="5dip" android:gravity="center"></TextView>
-
-		<LinearLayout 
-			android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:orientation="horizontal">
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSpace" android:text="SPACE"></Button>
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bMinus" android:text="-"></Button>
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bSlash" android:text="/"></Button>
-		<Button android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/bComma" android:text=","></Button>
-		</LinearLayout>
-
-	</LinearLayout>
-	
-	</TableRow>
-	
-</TableLayout>
-
-	
 </LinearLayout>
