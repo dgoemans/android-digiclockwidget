@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<string name="widget_name">數字時鐘小部件</string>
 	<string name="widget_name_twelve">DigiClock 小部件 (12hr)</string>
 	<string name="widget_name_twenty_four">DigiClock 小部件 (24hr)</string>
@@ -22,6 +22,10 @@
 	<!--  Text Settings Strings -->
 	<string name="text_color">Text Colour</string>
 	<string name="text_leading_zero">Hour Leading Zero</string>
+	<string name="text_date_enabled">Date Enabled</string>
+	<string name="text_typeface">Typeface</string>
+	
+	<string name="text_fonterror">Theme doesn\'t support custom font</string>
 	
 	<string name="date_day">天</string>
 	<string name="date_month">月</string>
@@ -62,23 +66,43 @@
 		<item>幽靈</item>
 		<item>荷蘭</item>
 		<item>桔黃</item>
-		<item>Clear - Black</item>
-		<item>Clear - White</item>
+		<item>Clear</item>
+		<item>Clear - Big Date</item>
 		<item>Yellow</item>
 		<item>Gold</item>
+		<item>Purple</item>
+		<item>Solid White</item>
+		<item>Solid Black</item>
+		<item>Cloud</item>
+		<item>Cubism White</item>
+		<item>Metal Pill</item>
+		<item>Speech</item>
+		<item>Chip</item>
+		<item>DigiMetal - by L. Baker</item>
+		<item>DigiPool - by L. Baker</item>
+		<item>DigiSage - by L. Baker</item>		
 	</string-array>
+	
 	<string-array name="launchers">
 		<item>鬧鐘</item>
 		<item>日曆</item>
 		<item>瀏覽器</item>
 		<item>主題色彩</item>
 	</string-array>
+	
+	<string-array name="typefaces">
+		<item>Normal</item>
+		<item>Sans</item>
+		<item>Serif</item>
+		<item>MonoSpace</item>
+	</string-array>
+	
 	<string-array name="settings">
 		<item>選擇主題</item>
 		<item>按啟動</item>
 		<item>Text Settings</item>
 		<item>日期格式 ( 測試 )</item>
-		<item>會見開發者</item>
+		<item>Help!</item>
 		<item>Kit up the Dev</item>
 	</string-array>
 	
@@ -86,4 +110,9 @@
 	<string name="load_tap_title">Loading</string>
 	
 	<string name="launcher_title">Choose your app</string>
+	<string name="launch_error">I can\'t do that Dave</string>
+	<string name="launch_error_detail">Sorry, that application cannot be launched. For some reason, it was made like that. Pity.</string>
+	
+	<string name="general_ok">Ok</string>
+	<string name="general_cancel">Cancel</string>
 </resources>

@@ -3,8 +3,6 @@ package com.davidgoemans.simpleClockWidget;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
@@ -67,7 +65,7 @@ public class SimpleClockWidgetTwelve extends AppWidgetProvider
  			m_serviceTimer = null;
  			m_serviceTask = null;
  		}
- 		
+ 		context.stopService(new Intent(context, SimpleClockUpdateServiceTwelve.class));
  		super.onDisabled(context);
  	}
  	
