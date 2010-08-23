@@ -57,4 +57,13 @@ public class ThemeChooser extends ListActivity
 
 		this.finish();
 	}
+	
+	@Override
+	protected void onPause()
+	{
+		this.startActivity(new Intent(this, SettingsList.class));
+		super.onPause();
+		
+		this.finish();
+	}
 }

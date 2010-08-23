@@ -4,22 +4,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
-import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -53,7 +49,7 @@ public class LauncherChooser extends ListActivity
 		{
 			super.onPostExecute(result);
 			
-			Object[] keys = menuEntries.toArray(); //m_packages.keySet().toArray();
+			Object[] keys = m_packages.keySet().toArray();
 			
 			getListView().invalidate();
 			setListAdapter(new ArrayAdapter<Object>(LauncherChooser.this,android.R.layout.simple_list_item_multiple_choice, keys));
@@ -64,13 +60,6 @@ public class LauncherChooser extends ListActivity
 			progressDialog.dismiss();
 			setSelected();
 		}
-		
-		/*@Override
-		protected void onProgressUpdate(Void... values) 
-		{
-			progressDialog.setProgress(progressTicker);
-			super.onProgressUpdate(values);
-		}*/
 
 		@Override
 		protected Void doInBackground(Void... params) 
@@ -167,21 +156,13 @@ public class LauncherChooser extends ListActivity
 			}
 		}
 		
-		for( int i=0; i<packageNames.size(); i++ )
+		Object[] keys = m_packages.keySet().toArray();
+		for( int i=0; i<keys.length; i++ )
 		{
-			String curPackage = null;
-			boolean found = false;
-			for( Iterator<String> it = selPackageNames.iterator(); it.hasNext(); )
+			if( selPackageNames.contains( m_packages.get(keys[i])) )
 			{
-				curPackage = it.next();
-
-				if( curPackage.equalsIgnoreCase( packageNames.get(i) ) )
-				{
-					found = true;
-					break;
-				}
+				getListView().setItemChecked(i, true);
 			}
-			getListView().setItemChecked(i, found);
 		}
 	}
 	
@@ -191,15 +172,19 @@ public class LauncherChooser extends ListActivity
 		SparseBooleanArray positions = getListView().getCheckedItemPositions();
 		ArrayList<PackageDesc> selectedPackages = new ArrayList<PackageDesc>();
 		
-		for( int i=0; i<packageNames.size(); i++)
+		Object[] keys = m_packages.keySet().toArray();
+		
+		// NOTE keys IS JUST FOR THE CORRECT SIZE, NOT ORDER DEPENDENT
+		for( int i=0; i<keys.length; i++ )
 		{
 			if( positions.get(i) )
 			{
-				selectedPackages.add(new PackageDesc(menuEntries.get(i), packageNames.get(i) ) );
-				Log.d("DigiClockWidget", menuEntries.get(i));
-			}			
+				String key = (String) getListView().getItemAtPosition( i );
+				selectedPackages.add(new PackageDesc( key, m_packages.get(key) ) );
+				Log.d("DigiClockWidget", key);
+			}
 		}
-		
+
 		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		SharedPreferences.Editor ed = prefs.edit();
 		ed.putInt("launcherCount", selectedPackages.size());
@@ -222,7 +207,11 @@ public class LauncherChooser extends ListActivity
 		ed.putBoolean("invalidate", true);
 		ed.commit();
 		
+		this.startActivity(new Intent(this, SettingsList.class));
+		
 		super.onPause();
+		
+		this.finish();
 	}
 	
 	@Override

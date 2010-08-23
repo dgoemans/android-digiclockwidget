@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/widget"
+	android:gravity="center"
+    android:layout_width="160dp"
+    android:layout_height="fill_parent"
+    android:background="@drawable/widget_solid_white"
+    android:clipToPadding="false"
+    android:orientation="vertical"
+    >
+
+<TextView  
+	android:id="@+id/time"
+	android:gravity="center"
+	android:padding="0dp"
+	android:layout_margin="0dp"
+    android:layout_width="fill_parent" 
+    android:layout_height="52sp"
+    style="@style/SingleTimeText"
+    />
+
+<TextView  
+	android:id="@+id/date"
+	android:gravity="center"
+	android:padding="0dp"
+	android:layout_margin="0dp"
+    android:layout_width="wrap_content" 
+    android:layout_height="wrap_content"
+    style="@style/SingleDateText"
+    />
+    
+</LinearLayout>

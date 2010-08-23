@@ -19,7 +19,8 @@ public class SimpleClockWidget extends AppWidgetProvider
 	public static final int tickTime = 5000;
 	public static final int delayTime = 0;
 	
-	public static final String PREFS_NAME = "digiClockPrefs";
+	public static String PREFS_NAME = "digiClockPrefs";
+	public static int instance = 0;
 	
     class RunUpdateService extends TimerTask 
     {
@@ -45,6 +46,8 @@ public class SimpleClockWidget extends AppWidgetProvider
 
     public void fixServices(Context context)
     {
+    	//Log.d("DigiClock", "Status| Task: " + m_serviceTask + " | Timer: " + m_serviceTimer);
+    	
  		if( m_serviceTask == null )
  		{
  			m_serviceTask = new RunUpdateService();
@@ -75,13 +78,15 @@ public class SimpleClockWidget extends AppWidgetProvider
  			m_serviceTimer = null;
  			m_serviceTask = null;
  		}
+
+ 		context.stopService(new Intent(context, SimpleClockUpdateService.class));
  		
  		super.onDisabled(context);
  	}
  	
  	@Override
  	public void onEnabled(Context context) 
- 	{
+ 	{ 		
  		Log.d("DigiClock","Enabled");
  		if ( m_serviceTimer != null )
  		{

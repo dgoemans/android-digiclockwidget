@@ -61,7 +61,7 @@ public class SettingsList extends ListActivity
 		case 4:
 			try 
 			{
-				this.startActivity( Intent.getIntent( "http://www.davidgoemans.com" ));
+				this.startActivity( Intent.getIntent( "http://www.davidgoemans.com/mainsite/node/18" ));
 			} 
 			catch (URISyntaxException e) 
 			{
@@ -80,6 +80,13 @@ public class SettingsList extends ListActivity
 			break;
 		}
 		
+		this.finish();
+	}
+	
+	@Override
+	protected void onPause() 
+	{
+		super.onPause();
 		this.finish();
 	}
 }

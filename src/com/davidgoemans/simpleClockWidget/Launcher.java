@@ -4,8 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -56,16 +59,43 @@ public class Launcher extends ListActivity
 		
 		super.onCreate(savedInstanceState);
 		setListAdapter(new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, menuEntries));		
-	}
+	}	
 	
 	@Override
 	protected void onListItemClick(android.widget.ListView l, android.view.View v, int position, long id )
 	{
 		super.onListItemClick(l, v, position, id);
 
-		Intent defineIntent = getPackageManager().getLaunchIntentForPackage(packageNames.get(position));
-		this.startActivity(defineIntent);
-
+		try
+		{
+			Intent defineIntent = getPackageManager().getLaunchIntentForPackage(packageNames.get(position));
+			this.startActivity(defineIntent);
+			this.finish();
+		}
+		catch( Exception e )
+		{
+			Log.d("DigiClock", "Error, app could not launch: " + e.getMessage());
+			
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle(R.string.launch_error);
+			builder.setMessage(R.string.launch_error_detail);
+			builder.setCancelable(false);
+			builder.setNeutralButton(R.string.general_ok, new DialogInterface.OnClickListener() 
+				{
+		           public void onClick(DialogInterface dialog, int id) 
+		           {
+		                dialog.cancel();
+		           }
+		        });
+			
+			builder.show();
+		}
+	}
+	
+	@Override
+	protected void onPause() 
+	{
+		super.onPause();
 		this.finish();
 	}
 }

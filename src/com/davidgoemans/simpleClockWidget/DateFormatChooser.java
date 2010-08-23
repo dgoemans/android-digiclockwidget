@@ -1,6 +1,7 @@
 package com.davidgoemans.simpleClockWidget;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -120,7 +121,11 @@ public class DateFormatChooser extends Activity
 			ed.commit();
 		}
 		
+		this.startActivity(new Intent(this, SettingsList.class));
+		
 		super.onPause();
+		
+		this.finish();
 	}
 
 	private boolean updateView(String format)
