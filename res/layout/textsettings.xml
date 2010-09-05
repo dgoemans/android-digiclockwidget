@@ -88,5 +88,44 @@
         </Spinner>
 		
 	</LinearLayout>
+	
+	<LinearLayout android:layout_height="wrap_content" 
+		android:orientation="vertical" 
+		android:layout_width="fill_parent" 
+		android:id="@+id/LinearLayout05">
 
+		<TextView android:layout_height="wrap_content" 
+			android:text="@string/text_time_size" 
+			android:id="@+id/lTimeSize" 
+			android:layout_width="fill_parent">
+		</TextView>
+		
+		<SeekBar android:layout_height="wrap_content" 
+			android:layout_width="fill_parent" 
+			android:clickable="true" 
+			android:id="@+id/sbTimeSize" 
+			android:max="52">
+		</SeekBar>
+		
+	</LinearLayout>
+	
+	<LinearLayout android:layout_height="wrap_content" 
+		android:orientation="vertical" 
+		android:layout_width="fill_parent" 
+		android:id="@+id/LinearLayout06">
+
+		<TextView android:layout_height="wrap_content" 
+			android:text="@string/text_date_size" 
+			android:id="@+id/lDateSize" 
+			android:layout_width="fill_parent">
+		</TextView>
+		
+		<SeekBar android:layout_height="wrap_content" 
+			android:layout_width="fill_parent" 
+			android:clickable="true" 
+			android:id="@+id/sbDateSize" 
+			android:max="52">
+		</SeekBar>
+		
+	</LinearLayout>
 </LinearLayout>

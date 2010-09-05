@@ -181,10 +181,17 @@ public class UpdateFunctions
 		{
 			// Opens the way for real themes!
 			views.setImageViewBitmap(R.id.background, BitmapFactory.decodeResource(context.getResources(), info.backgroundImageId) );
-		}
+		}		
+		
 		
 		if( color > 14 || color == 11 )
 		{
+			float textTimeSize = prefs.getFloat("textTimeSize", 52);
+			views.setFloat(R.id.time, "setTextSize", textTimeSize);
+			
+			float textDateSize = prefs.getFloat("textDateSize", 14);
+			views.setFloat(R.id.date, "setTextSize", textDateSize);
+			
 			int textColor = prefs.getInt("textColor", 0);
 			if( textColor != 0 )
 			{
