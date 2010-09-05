@@ -24,6 +24,8 @@
 	<string name="text_leading_zero">Hour Leading Zero</string>
 	<string name="text_date_enabled">Date Enabled</string>
 	<string name="text_typeface">Typeface</string>
+	<string name="text_time_size">Time Size</string>
+	<string name="text_date_size">Date Size</string>
 	
 	<string name="text_fonterror">Theme doesn\'t support custom font</string>
 	

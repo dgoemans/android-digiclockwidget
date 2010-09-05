@@ -46,6 +46,9 @@ public class TextSettings extends Activity
 	private boolean m_dateEnabled = true;
 	private String m_typeface = "normal";
 	
+	private float m_timeSize = 52;
+	private float m_dateSize = 14;
+	
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -94,7 +97,7 @@ public class TextSettings extends Activity
 	    
 	    for( int i=0; i<typeFaces.length; i++ )
 		{
-	    	if( typeFaces[i] == m_typeface )
+	    	if( typeFaces[i].equalsIgnoreCase(m_typeface) )
 	    	{
 	    		typeface.setSelection(i);
 	    		break;
@@ -111,6 +114,20 @@ public class TextSettings extends Activity
 			title.setText(R.string.text_fonterror);
 			typeface.setEnabled(false);
 		}
+		
+		
+		// Font size numerical selects
+		
+		m_timeSize = prefs.getFloat("textTimeSize", 52);
+		m_dateSize = prefs.getFloat("textDateSize", 14);
+		
+		sb = (SeekBar)findViewById(R.id.sbTimeSize);
+		sb.setOnSeekBarChangeListener(m_timeSizePicked);
+		sb.setProgress((int)m_timeSize);
+		
+		sb = (SeekBar)findViewById(R.id.sbDateSize);
+		sb.setOnSeekBarChangeListener(m_dateSizePicked);
+		sb.setProgress((int)m_dateSize);
 	}
 	
 	@Override
@@ -129,7 +146,13 @@ public class TextSettings extends Activity
 		ed.putBoolean("leadingZero", leadZero.isChecked());
 		ed.putBoolean("dateEnabled", dateEn.isChecked());
 		ed.putString("typeface", m_typeface);
+		
+		ed.putFloat("textTimeSize", m_timeSize);
+		ed.putFloat("textDateSize", m_dateSize);
+		
 		ed.putBoolean("invalidate", true);
+		
+		
 		ed.commit();
 
 		this.startActivity(new Intent(this, SettingsList.class));
@@ -151,6 +174,66 @@ public class TextSettings extends Activity
 			Log.d("DigiClock", "New Color: " + String.valueOf(progress));
 			
 			m_textColor = colArray[progress];
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) 
+		{
+			// DO NOTHING
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) 
+		{
+			// DO NOTHING
+		}
+	};
+	
+	static final float MAX_TEXT_SIZE = 80;
+	
+	OnSeekBarChangeListener m_timeSizePicked = new OnSeekBarChangeListener()
+	{
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) 
+		{
+			Log.d("DigiClock", "Time size: " + String.valueOf(progress));
+			m_timeSize = progress;
+			
+			if( m_dateSize + m_timeSize > MAX_TEXT_SIZE )
+			{
+				SeekBar sb = (SeekBar)findViewById(R.id.sbDateSize);
+				sb.setProgress((int) (MAX_TEXT_SIZE - m_timeSize));
+			}
+		}
+
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) 
+		{
+			// DO NOTHING
+		}
+
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) 
+		{
+			// DO NOTHING
+		}
+	};
+	
+	OnSeekBarChangeListener m_dateSizePicked = new OnSeekBarChangeListener()
+	{
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) 
+		{
+			Log.d("DigiClock", "Date size: " + String.valueOf(progress));
+			m_dateSize = progress;
+			
+			if( m_dateSize + m_timeSize > MAX_TEXT_SIZE )
+			{
+				SeekBar sb = (SeekBar)findViewById(R.id.sbTimeSize);
+				sb.setProgress((int) (MAX_TEXT_SIZE - m_dateSize));
+			}
 		}
 
 		@Override
