@@ -8,10 +8,14 @@ import java.util.Map.Entry;
 
 import android.app.ListActivity;
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,7 +33,7 @@ public class LauncherChooser extends ListActivity
 	public static ProgressDialog progressDialog = null;
 	
 	private int progressTicker;
-	
+
 	class PackageDesc
 	{
 		public PackageDesc(String name, String packageName)
@@ -46,7 +50,7 @@ public class LauncherChooser extends ListActivity
 	{
 		@Override
 		protected void onPostExecute(Void result) 
-		{
+		{			
 			super.onPostExecute(result);
 			
 			Object[] keys = m_packages.keySet().toArray();
@@ -70,6 +74,7 @@ public class LauncherChooser extends ListActivity
 
 	};
 	
+	FillListTask task;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -89,10 +94,9 @@ public class LauncherChooser extends ListActivity
 		
 		m_packages = new TreeMap<String, String>();
 		
-		new FillListTask().execute();
-		
-		
-		
+		task = new FillListTask();
+		task.execute();
+
 		super.onCreate(savedInstanceState);
 	}
 
@@ -100,6 +104,7 @@ public class LauncherChooser extends ListActivity
 	private void populateList()
 	{
 		List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
+		
 		progressDialog.setMax(packages.size());
 		
 		int count = 0;
@@ -169,6 +174,9 @@ public class LauncherChooser extends ListActivity
 	@Override
 	protected void onPause() 
 	{
+		task.cancel(true);
+		if( progressDialog.isShowing() ) progressDialog.dismiss();
+		
 		SparseBooleanArray positions = getListView().getCheckedItemPositions();
 		ArrayList<PackageDesc> selectedPackages = new ArrayList<PackageDesc>();
 		
@@ -177,7 +185,7 @@ public class LauncherChooser extends ListActivity
 		// NOTE keys IS JUST FOR THE CORRECT SIZE, NOT ORDER DEPENDENT
 		for( int i=0; i<keys.length; i++ )
 		{
-			if( positions.get(i) )
+			if( positions != null && positions.get(i) )
 			{
 				String key = (String) getListView().getItemAtPosition( i );
 				selectedPackages.add(new PackageDesc( key, m_packages.get(key) ) );
@@ -207,7 +215,7 @@ public class LauncherChooser extends ListActivity
 		ed.putBoolean("invalidate", true);
 		ed.commit();
 		
-		this.startActivity(new Intent(this, SettingsList.class));
+		startActivity(new Intent(this, SettingsList.class));
 		
 		super.onPause();
 		

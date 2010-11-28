@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-	package="com.davidgoemans.simpleClockWidget" android:versionCode="23" android:versionName="2.5a Added text size setting">
+	package="com.davidgoemans.simpleClockWidget" android:versionCode="28" android:versionName="2.6c">
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 
 		<activity
@@ -13,11 +13,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        
 		<activity
-            android:name=".ThemeChooser"
-            android:label="@string/theme_chooser_name"
-            android:theme="@android:style/Theme.Dialog" >
+            android:name=".GetMoreThemes"
+            android:label="@string/theme_chooser_name">
+            
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         
 		<activity
@@ -62,11 +65,19 @@
 		<service android:name=".SimpleClockUpdateServiceTwelve" />
 
 	</application>
+	
 	<uses-sdk android:minSdkVersion="3" />
+	<uses-feature />
+	<users-configuration />
+	
+	<uses-permission android:name="android.permission.INTERNET"/>
     
     <supports-screens
           android:largeScreens="true"
           android:normalScreens="true"
           android:smallScreens="true"
           android:anyDensity="true" />
+          
+	
+	
 </manifest>

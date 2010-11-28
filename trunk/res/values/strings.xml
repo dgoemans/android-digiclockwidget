@@ -12,6 +12,10 @@
 	<string name="time_default_full">00:00</string>
 	<string name="date_default">Sat, 31 Dec 2009</string>
 	
+	<string name="more_themes">Choose Themes</string>
+	<string name="online_themes">Online Themes</string>
+	<string name="offline_themes">Offline Themes</string>
+	
 	<!-- Date Formatter Strings -->
 	<string name="date_format_name">Date Format</string>
 	<string name="date_format_save">save</string>
@@ -60,21 +64,21 @@
 		<item>Dec</item>
 	</string-array>
 	<string-array name="colors">
-		<item>Black</item>
-		<item>White</item>
-		<item>Velvet</item>
-		<item>Pink</item>
-		<item>Blue</item>
-		<item>Red</item>
-		<item>Green</item>
-		<item>Ghost</item>
-		<item>Going Dutch</item>
-		<item>Orange</item>
+		<item>Black (No Custom Font)</item>
+		<item>White (No Custom Font)</item>
+		<item>Velvet (No Custom Font)</item>
+		<item>Pink (No Custom Font)</item>
+		<item>Blue (No Custom Font)</item>
+		<item>Red (No Custom Font)</item>
+		<item>Green (No Custom Font)</item>
+		<item>Ghost (No Custom Font)</item>
+		<item>Going Dutch (No Custom Font)</item>
+		<item>Orange (No Custom Font)</item>
+		<item>Clear (No Custom Font)</item>
 		<item>Clear</item>
-		<item>Clear - Big Date</item>
-		<item>Yellow</item>
-		<item>Gold</item>
-		<item>Purple</item>
+		<item>Yellow (No Custom Font)</item>
+		<item>Gold (No Custom Font)</item>
+		<item>Purple (No Custom Font)</item>
 		<item>Solid White</item>
 		<item>Solid Black</item>
 		<item>Cloud</item>
@@ -82,9 +86,9 @@
 		<item>Metal Pill</item>
 		<item>Speech</item>
 		<item>Chip</item>
-		<item>DigiMetal - by L. Baker</item>
-		<item>DigiPool - by L. Baker</item>
-		<item>DigiSage - by L. Baker</item>
+		<item>DigiMetal</item>
+		<item>DigiPool</item>
+		<item>DigiSage</item>
 	</string-array>
 	
 	<string-array name="launchers">
