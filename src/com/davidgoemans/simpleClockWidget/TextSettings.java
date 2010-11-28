@@ -1,12 +1,19 @@
 package com.davidgoemans.simpleClockWidget;
 
+import yuku.ambilwarna.AmbilWarnaDialog;
+import yuku.ambilwarna.AmbilWarnaDialog.*;
+
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -57,24 +64,21 @@ public class TextSettings extends Activity
 
 		setContentView(R.layout.textsettings);
 
-		SeekBar sb = (SeekBar)findViewById(R.id.sbColor);
-		sb.setOnSeekBarChangeListener(m_colorPicked);
+		SeekBar sb;
 		
 		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		m_textColor = prefs.getInt("textColor", 0);
 		
-		if( m_textColor != 0 )
-		{
-			for( int i=0; i<colArray.length; i++ )
-			{
-				if( colArray[i] == m_textColor )
-				{
-					sb.setProgress(i);
-					break;
-				}
-			}
-		}
+		Button button = (Button)findViewById(R.id.bColor);
+		button.setOnClickListener(new OnClickListener() {
+		    @Override
+		    public void onClick(View v) 
+		    {
+		      showTextColorPicker(v);
+		    }
+		  });
 		
+		updateTextColor();
 		
 		m_leadingZero = prefs.getBoolean("leadingZero", true);
 		
@@ -108,14 +112,8 @@ public class TextSettings extends Activity
 		title.setText(R.string.text_typeface);
 	    
 	    int theme = prefs.getInt("colorId", 0);
-		// For legacy themes, disable the spinner
-		if( theme < 15 && theme != 11 )
-		{
-			title.setText(R.string.text_fonterror);
-			typeface.setEnabled(false);
-		}
-		
-		
+	    boolean pathExists = prefs.contains("bgPath");
+	    
 		// Font size numerical selects
 		
 		m_timeSize = prefs.getFloat("textTimeSize", 52);
@@ -128,6 +126,53 @@ public class TextSettings extends Activity
 		sb = (SeekBar)findViewById(R.id.sbDateSize);
 		sb.setOnSeekBarChangeListener(m_dateSizePicked);
 		sb.setProgress((int)m_dateSize);
+		
+		// For legacy themes, disable the spinner
+		if( theme < 15 && theme != 11 && !pathExists )
+		{
+			disableFontComponents();
+		}
+	}
+	
+	void updateTextColor()
+	{
+		Button toChange = (Button)findViewById(R.id.bColor);
+		toChange.setTextColor(m_textColor);
+	}
+	
+	public void showTextColorPicker(View view)
+	{
+		AmbilWarnaDialog dialog = new AmbilWarnaDialog(this, m_textColor, new OnAmbilWarnaListener() {
+	        @Override
+	        public void onOk(AmbilWarnaDialog dialog, int color) 
+	        {	        	
+	    		m_textColor = color;
+	    		updateTextColor();
+	        }
+	                
+	        @Override
+	        public void onCancel(AmbilWarnaDialog dialog) 
+	        {
+	        }
+		});
+
+		dialog.show();
+		
+	}
+	
+	void disableFontComponents()
+	{
+		SeekBar sb = (SeekBar)findViewById(R.id.sbTimeSize);
+		sb.setEnabled(false);
+		
+		sb = (SeekBar)findViewById(R.id.sbDateSize);
+		sb.setEnabled(false);
+		
+		TextView title = (TextView) findViewById(R.id.lTypeface);
+		title.setText(R.string.text_fonterror);
+		
+		Spinner typeface = (Spinner) findViewById(R.id.sTypeface);
+		typeface.setEnabled(false);
 	}
 	
 	@Override
@@ -161,33 +206,6 @@ public class TextSettings extends Activity
 		
 		this.finish();
 	}
-	
-	OnSeekBarChangeListener m_colorPicked = new OnSeekBarChangeListener()
-	{
-		@Override
-		public void onProgressChanged(SeekBar seekBar, int progress,
-				boolean fromUser) 
-		{
-			TextView tmp = (TextView)findViewById(R.id.lColor);
-			tmp.setBackgroundColor(colArray[progress]);
-			seekBar.setBackgroundColor(colArray[progress]);
-			Log.d("DigiClock", "New Color: " + String.valueOf(progress));
-			
-			m_textColor = colArray[progress];
-		}
-
-		@Override
-		public void onStartTrackingTouch(SeekBar seekBar) 
-		{
-			// DO NOTHING
-		}
-
-		@Override
-		public void onStopTrackingTouch(SeekBar seekBar) 
-		{
-			// DO NOTHING
-		}
-	};
 	
 	static final float MAX_TEXT_SIZE = 80;
 	

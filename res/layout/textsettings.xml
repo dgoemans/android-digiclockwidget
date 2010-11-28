@@ -4,31 +4,51 @@
 	xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="vertical" android:padding="10dip">
 	
-	<TextView android:layout_height="wrap_content" 
-		android:text="@string/text_color" 
-		android:id="@+id/lColor" 
+	<LinearLayout android:id="@+id/LinearLayout12" 
+		android:layout_height="wrap_content" 
+		android:orientation="horizontal" 
 		android:layout_width="fill_parent">
-	</TextView>
+		
+		<TextView android:layout_height="wrap_content" 
+			android:text="@string/text_color" 
+			android:id="@+id/lColor" 
+			android:layout_gravity="center_vertical"
+			android:layout_width="wrap_content" 
+			android:layout_weight="2">
+		</TextView>	
+		
+		<Button android:layout_height="wrap_content" 
+			android:text="00:00"
+			android:shadowRadius="5"
+			android:shadowColor="#FF000000"
+			android:id="@+id/bColor" 
+			android:layout_gravity="center_vertical" 
+			android:layout_width="wrap_content"
+			android:layout_margin="10dip">
+		</Button>
 	
-	<SeekBar android:layout_height="wrap_content" 
+	</LinearLayout>
+	
+
+	
+	<!-- SeekBar android:layout_height="wrap_content" 
 		android:layout_width="fill_parent" 
 		android:clickable="true" 
 		android:id="@+id/sbColor" 
 		android:max="10">
-	</SeekBar>
+	</SeekBar-->
+	
 
 
 	<LinearLayout android:id="@+id/LinearLayout02" 
 		android:layout_height="wrap_content" 
 		android:orientation="horizontal" 
 		android:layout_width="fill_parent">
-		
-		m_leadingZero
 	
 		<TextView android:layout_height="wrap_content" 
 			android:id="@+id/lLeadingZero" 
 			android:text="@string/text_leading_zero" 
-			android:layout_gravity="center_vertical" 
+			android:layout_gravity="center_vertical"
 			android:layout_width="wrap_content" 
 			android:layout_weight="2">
 		</TextView>
@@ -46,8 +66,6 @@
 		android:orientation="horizontal" 
 		android:layout_width="fill_parent" 
 		android:id="@+id/LinearLayout03">
-		
-		m_leadingZero
 		
 		<TextView android:layout_height="wrap_content" 
 			android:layout_gravity="center_vertical" 

@@ -1,17 +1,12 @@
 package com.davidgoemans.simpleClockWidget;
 
-import java.util.Timer;
-import java.util.TimerTask;
-
-import android.app.AlarmManager;
-import android.app.PendingIntent;
+import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.IBinder;
-import android.util.Log;
+import android.content.SharedPreferences;
 
 public class SimpleClockWidget extends AppWidgetProvider 
 {
@@ -20,85 +15,40 @@ public class SimpleClockWidget extends AppWidgetProvider
 	public static final int delayTime = 0;
 	
 	public static String PREFS_NAME = "digiClockPrefs";
-	public static int instance = 0;
-	
-    class RunUpdateService extends TimerTask 
-    {
-    	public Context context = null;    	
-    	
-    	public void run() 
-    	{
-    		SimpleClockWidget.this.fixServices(context);
-   			context.startService(new Intent(context, SimpleClockUpdateService.class));
-    	}
-    }
-
-    static RunUpdateService m_serviceTask = null;
-	static Timer m_serviceTimer = null;
 	
 	@Override
 	public void onReceive(Context context, Intent intent) 
-	{
-		Log.d("DigiClock","Receive");
-		fixServices(context);
+	{		
+		UpdateFunctions.SetTwelve(context, false);		
+		UpdateFunctions.Invalidate(context);
+
+		context.startService(new Intent(context, SimpleClockUpdateService.class));
+		
 		super.onReceive(context, intent);
 	}
 
-    public void fixServices(Context context)
-    {
-    	//Log.d("DigiClock", "Status| Task: " + m_serviceTask + " | Timer: " + m_serviceTimer);
-    	
- 		if( m_serviceTask == null )
- 		{
- 			m_serviceTask = new RunUpdateService();
- 	 		m_serviceTask.context = context;
- 		}
- 		
- 		if( m_serviceTimer == null )
- 		{
- 			m_serviceTimer = new Timer();
- 			m_serviceTimer.schedule(m_serviceTask, delayTime, tickTime);
- 		}
-    }
     
  	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) 
  	{	
- 		fixServices(context);
+ 		UpdateFunctions.Invalidate(context);
+ 		context.startService(new Intent(context, SimpleClockUpdateService.class));
     }
  	
  	@Override
  	public void onDisabled(Context context) 
  	{
- 		Log.d("DigiClock","Disabled");
- 		if ( m_serviceTimer != null )
- 		{
- 			m_serviceTimer.cancel();
- 			m_serviceTimer.purge();
- 			
- 			m_serviceTimer = null;
- 			m_serviceTask = null;
- 		}
-
  		context.stopService(new Intent(context, SimpleClockUpdateService.class));
- 		
+
  		super.onDisabled(context);
  	}
  	
  	@Override
  	public void onEnabled(Context context) 
- 	{ 		
- 		Log.d("DigiClock","Enabled");
- 		if ( m_serviceTimer != null )
- 		{
- 			m_serviceTimer.cancel();
- 		}
- 		
- 		m_serviceTask = new RunUpdateService();
- 		m_serviceTask.context = context;
-		
-		m_serviceTimer = new Timer();
-		m_serviceTimer.schedule(m_serviceTask, delayTime, tickTime);
- 		
+ 	{
+ 		UpdateFunctions.Invalidate(context);
+ 		UpdateFunctions.LaunchSettingsApp(context);
+
+ 		context.startService(new Intent(context, SimpleClockUpdateService.class));
  		super.onEnabled(context);
  	}
 }

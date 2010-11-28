@@ -47,7 +47,7 @@ public class SettingsList extends ListActivity
 		switch( position )
 		{
 		case 0:
-			this.startActivity(new Intent(this, ThemeChooser.class));
+			this.startActivity(new Intent(this, GetMoreThemes.class));
 			break;
 		case 1:			
 			this.startActivity(new Intent(this, LauncherChooser.class));

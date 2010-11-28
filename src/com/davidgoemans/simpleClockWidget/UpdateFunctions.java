@@ -1,16 +1,33 @@
 package com.davidgoemans.simpleClockWidget;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import android.app.PendingIntent;
+import android.app.PendingIntent.CanceledException;
+import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Bitmap.CompressFormat;
+import android.os.PowerManager;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -24,13 +41,15 @@ public class UpdateFunctions
 		{
 			layoutId = R.layout.main;
 			backgroundImageId = -1;
+			backgroundImagePath = null;
 		}
 		
 		int layoutId;
 		int backgroundImageId;
+		String backgroundImagePath;
 	}
 
-	static LayoutInfo GetLayoutFromColorId( int colorId, String typeface )
+	static LayoutInfo GetLayoutFromColorId( int colorId, String typeface, String backgroudPath)
 	{
 		LayoutInfo info = new LayoutInfo();
 		
@@ -125,6 +144,10 @@ public class UpdateFunctions
 			info.backgroundImageId = R.drawable.external_digisage;
 			info.layoutId = layoutFromTypeFace(typeface);
 			break;
+		default:
+			info.backgroundImageId = -1;
+			info.backgroundImagePath = backgroudPath;
+			info.layoutId = layoutFromTypeFace(typeface);
 		}
 		
 		return info;
@@ -162,9 +185,11 @@ public class UpdateFunctions
 	static String GetDateWithFormat( String format ) throws IllegalArgumentException
 	{
 		String outString = convertToNewDateFormat( format );
-		SimpleDateFormat frmt = new SimpleDateFormat(outString);
-		Date now = new Date();
-		return frmt.format(now);
+		//outString = 
+		//SimpleDateFormat frmt = new SimpleDateFormat(outString);
+		//Date now = new Date();
+		
+		return (String) DateFormat.format(outString, new Date());//frmt.format(now);
 	}
 	
 	public static RemoteViews buildUpdate(Context context, boolean twelve ) 
@@ -172,19 +197,28 @@ public class UpdateFunctions
 		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);		
 		int color = prefs.getInt("colorId", 0);
 		String typeface = prefs.getString("typeface", "normal");
-		
-		LayoutInfo info = UpdateFunctions.GetLayoutFromColorId(color, typeface);
+		String backgroudPath = prefs.getString("bgPath", null);
+
+		LayoutInfo info = UpdateFunctions.GetLayoutFromColorId(color, typeface, backgroudPath);
 		
 		RemoteViews views = new RemoteViews(context.getPackageName(), info.layoutId);
+		
+		Log.d("DigiClock","Backgroud image: "+ info.backgroundImagePath + " and ID: " + info.backgroundImageId);
 		
 		if( info.backgroundImageId != -1 )
 		{
 			// Opens the way for real themes!
 			views.setImageViewBitmap(R.id.background, BitmapFactory.decodeResource(context.getResources(), info.backgroundImageId) );
-		}		
+		}
+		else if(info.backgroundImagePath != null)
+		{
+			Bitmap bmp = BitmapFactory.decodeFile(info.backgroundImagePath);
+			Log.d("DigiClock","BMP: " + bmp);
+			views.setImageViewBitmap(R.id.background,  bmp);
+		}
 		
 		
-		if( color > 14 || color == 11 )
+		if( color > 14 || color == 11 || info.backgroundImagePath != null )
 		{
 			float textTimeSize = prefs.getFloat("textTimeSize", 52);
 			views.setFloat(R.id.time, "setTextSize", textTimeSize);
@@ -363,4 +397,213 @@ public class UpdateFunctions
                 
 		return views;
 	}
+	
+	static void LaunchSettingsApp(Context context)
+	{
+		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+		if( prefs.getBoolean("settingsShown", false) ) return;
+		
+ 		// Every time added, launch settings
+ 		try 
+ 		{
+ 			PendingIntent pendingIntent = PendingIntent.getActivity(context,0, new Intent(context, SettingsList.class), 0);
+			pendingIntent.send();
+		} 
+ 		catch (CanceledException e) 
+		{
+			e.printStackTrace();
+		}
+ 		
+ 		
+ 		SharedPreferences.Editor ed = prefs.edit();
+ 		ed.putBoolean("settingsShown", true);
+		ed.commit();
+	}
+
+	public static List<DigiTheme> getOnlineThemes()
+	{
+		List<DigiTheme> themes = new ArrayList<DigiTheme>();
+		URL site = null;
+		HttpURLConnection conn = null;
+		InputStream stream = null;
+		
+		try
+		{
+			site = new URL("http://davidgoemans.com/DigiClock/list_themes.php?device=1");
+	    	conn = (HttpURLConnection)site.openConnection();
+			conn.setDoInput(true);
+	    	conn.connect();
+	    	
+	    	stream = conn.getInputStream();
+	    	byte[] data = new byte[stream.available()];
+	    	stream.read(data);
+	    	
+	    	String dataString = new String(data, 0, data.length);
+	    		    	
+	    	JSONTokener tokener = new JSONTokener(dataString);
+	    	
+	    	while(tokener.more())
+	    	{
+	    		JSONObject cur = (JSONObject)tokener.nextValue();
+
+	    		DigiTheme theme = new DigiTheme(cur.getString("Name"), 
+	    				cur.getString("Creator"), 
+	    				URLDecoder.decode( cur.getString("URL") ), 
+	    				(float)cur.getDouble("Price"));
+	    			    		
+	    		themes.add(theme);
+	    	}
+		}
+		catch(Exception e)
+		{
+			Log.w("DigiClock", "Couldn't download bitmap" + e.getMessage());
+		}
+		finally
+		{
+			try
+			{
+				if( stream != null ) stream.close();
+			}
+			catch(Exception e)
+			{
+				Log.w("DigiClock", "Failed to close stream: " + e.getMessage());
+			}
+			
+			if( conn != null ) conn.disconnect();
+		}
+    	
+    	return themes;
+	}
+
+	// Returns the path where the bitmap got written to
+	// Also writes that to the theme
+	public static String downloadThemeImage(DigiTheme theme, Context context)
+	{
+		OutputStream os = null;
+		
+    	try 
+    	{
+    		Bitmap bmp = getBitmapFromURL(theme.URL);
+    		
+    		if( bmp == null ) return null;
+    		
+    		Log.d("DigiClock", "Gonna write: " + context);
+			
+			os = context.openFileOutput(theme.Name + ".png", Context.MODE_PRIVATE);
+			
+			theme.ImageLocation = context.getFilesDir() + "/" + theme.Name + ".png";
+			
+			Log.d("DigiClock", "Image location: " + theme.ImageLocation );
+			
+    		bmp.compress(CompressFormat.PNG, 5, os);
+    		
+    		os.close();
+    	}
+    	catch (Exception e) 
+    	{
+    		Log.w("DigiClock", "Error writing theme image to file" + e.getMessage());
+    		return null;
+    	}
+		
+    	return theme.ImageLocation;
+	}
+	
+	private static Bitmap getBitmapFromURL(String url)
+	{
+		HttpURLConnection conn = null;
+		InputStream stream = null;
+		Bitmap bmp = null;
+		
+		try
+		{
+			URL site = new URL(url);
+	    	conn = (HttpURLConnection)site.openConnection();
+			conn.setDoInput(true);
+	    	conn.connect();
+	    	
+	    	stream = conn.getInputStream();
+	    	
+	    	bmp = BitmapFactory.decodeStream(stream);
+	    	
+	    	stream.close();
+		}
+		catch(Exception e)
+		{
+			Log.w("DigiClock", "Connection error");
+			
+			return null;
+		}
+		finally
+		{
+			if( conn != null )
+				conn.disconnect();
+		}
+    	
+    	return bmp;
+	}
+	
+	public static void SetTwelve(Context context, boolean twelve)
+	{
+		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+ 		SharedPreferences.Editor ed = prefs.edit();
+ 		ed.putBoolean("twelvehour", twelve);
+		ed.commit();
+	}
+	
+	public static void Invalidate(Context context)
+	{
+		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+ 		SharedPreferences.Editor ed = prefs.edit();		
+		ed.putBoolean("invalidate", true);
+		ed.commit();
+	}
+	
+	static int prevMinute = -1;
+	
+	public enum UpdateType
+	{
+		NotRequired,
+		TimeChange,
+		Invalidated
+	}
+	
+	public static boolean TimeChanged()
+	{
+    	Calendar rightNow = Calendar.getInstance();
+    	int minute = rightNow.get(Calendar.MINUTE);
+    	
+    	return minute != prevMinute;
+	}
+	
+	public static UpdateType UpdateWidget(Context context, Class<?> cls)
+    {
+    	SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
+    	
+    	Calendar rightNow = Calendar.getInstance();
+    	int minute = rightNow.get(Calendar.MINUTE);
+    	
+     	boolean invalidated = prefs.getBoolean("invalidate", false);
+    	
+		if( minute == prevMinute && !invalidated )
+    	{
+    		return UpdateType.NotRequired;
+    	}
+		
+ 		SharedPreferences.Editor ed = prefs.edit();		
+		ed.putBoolean("invalidate", false);
+		ed.commit();
+		
+    	prevMinute = minute;
+    	
+    	boolean twelve = prefs.getBoolean("twelvehour", true);
+        RemoteViews updateViews = UpdateFunctions.buildUpdate(context, twelve);
+        
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+
+        // Push update for all sized widgets to home screen    
+        ComponentName thisWidget = new ComponentName(context, cls);
+        manager.updateAppWidget(thisWidget, updateViews);
+        
+        return invalidated ? UpdateType.Invalidated : UpdateType.TimeChange;
+    }
 }

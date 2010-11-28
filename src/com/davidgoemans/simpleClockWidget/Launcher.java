@@ -8,10 +8,14 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.app.ListActivity;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -24,6 +28,9 @@ public class Launcher extends ListActivity
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
 	{
+		UpdateFunctions.Invalidate(getApplicationContext());
+		startService(new Intent(this, SimpleClockUpdateService.class));
+		
 		menuEntries = new ArrayList<String>();		
 		packageNames = new ArrayList<String>();
 
@@ -68,28 +75,39 @@ public class Launcher extends ListActivity
 
 		try
 		{
-			Intent defineIntent = getPackageManager().getLaunchIntentForPackage(packageNames.get(position));
+			Intent defineIntent;
+			defineIntent = getPackageManager().getLaunchIntentForPackage(packageNames.get(position));
+			
 			this.startActivity(defineIntent);
 			this.finish();
 		}
+		catch( ActivityNotFoundException e )
+		{
+			Log.d("DigiClock", "Error, app not found: " + e.getMessage());
+			showError();
+		}
 		catch( Exception e )
 		{
-			Log.d("DigiClock", "Error, app could not launch: " + e.getMessage());
-			
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setTitle(R.string.launch_error);
-			builder.setMessage(R.string.launch_error_detail);
-			builder.setCancelable(false);
-			builder.setNeutralButton(R.string.general_ok, new DialogInterface.OnClickListener() 
-				{
-		           public void onClick(DialogInterface dialog, int id) 
-		           {
-		                dialog.cancel();
-		           }
-		        });
-			
-			builder.show();
+			Log.d("DigiClock", "Error, general launch error: " + e.getMessage());
+			showError();
 		}
+	}
+	
+	void showError()
+	{
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(R.string.launch_error);
+		builder.setMessage(R.string.launch_error_detail);
+		builder.setCancelable(false);
+		builder.setNeutralButton(R.string.general_ok, new DialogInterface.OnClickListener() 
+			{
+	           public void onClick(DialogInterface dialog, int id) 
+	           {
+	                dialog.cancel();
+	           }
+	        });
+		
+		builder.show();
 	}
 	
 	@Override
