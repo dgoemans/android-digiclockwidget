@@ -1,5 +1,6 @@
 package com.davidgoemans.simpleClockWidget;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -435,10 +436,36 @@ public class UpdateFunctions
 	    	conn.connect();
 	    	
 	    	stream = conn.getInputStream();
-	    	byte[] data = new byte[stream.available()];
-	    	stream.read(data);
+	    	
+	    	int size = 10000;
+	    	byte[] data = new byte[size];
+	    	
+	    	int i=0;
+	    	int dataValue = 0;
+	    	while(dataValue != -1)
+	    	{
+	    		dataValue = stream.read();
+	    		data[i] = (byte)dataValue;
+	    		
+	    		i++;
+	    		
+	    		// If we've gone over the limit, expand the array
+	    		if( i >= size )
+	    		{
+	    			size *= 2;
+	    			byte[] newData = new byte[size];
+	    			int j = 0;
+	    			for(byte cur : data)
+	    			{
+	    				newData[j] = cur;
+	    			}
+	    			data = newData;
+	    		}
+	    	}
 	    	
 	    	String dataString = new String(data, 0, data.length);
+	    	
+	    	//Log.d("DigiClock","Data: " + dataString);
 	    		    	
 	    	JSONTokener tokener = new JSONTokener(dataString);
 	    	
@@ -479,7 +506,7 @@ public class UpdateFunctions
 	// Also writes that to the theme
 	public static String downloadThemeImage(DigiTheme theme, Context context)
 	{
-		OutputStream os = null;
+		FileOutputStream os = null;
 		
     	try 
     	{
@@ -497,6 +524,7 @@ public class UpdateFunctions
 			
     		bmp.compress(CompressFormat.PNG, 5, os);
     		
+    		os.getFD().sync();
     		os.close();
     	}
     	catch (Exception e) 

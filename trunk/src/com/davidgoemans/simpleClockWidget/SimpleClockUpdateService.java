@@ -12,6 +12,13 @@ public class SimpleClockUpdateService extends Service
 	private UpdateTimer timer = null;
 	
 	@Override
+	public void onCreate()
+	{
+		Log.d("DigiClock", "Got killed, restarting");
+		onStart(new Intent(), -1);
+	}
+	
+	@Override
     public void onStart(Intent intent, int startId) 
     {
     	Log.d("DigiClock", "StartID: " + startId + " Intent: " + intent);
