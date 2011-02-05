@@ -5,7 +5,7 @@
 	android:layout_height="fill_parent" 
 	xmlns:android="http://schemas.android.com/apk/res/android" 
 	android:orientation="vertical" 
-	android:padding="10dip"
+	android:padding="5dip"
 	android:isScrollContainer="true">
 		
 	<GridView xmlns:android="http://schemas.android.com/apk/res/android" 

@@ -3,11 +3,14 @@
 	<string name="widget_name">Digi Clock Widget</string>
 	<string name="widget_name_twelve">DigiClock Widget (12hr)</string>
 	<string name="widget_name_twenty_four">DigiClock Widget (24hr)</string>
+	<string name="widget_name_large">DigiClock Widget (Large)</string>
 	<string name="app_name">Digi Clock Widget</string>
 	<string name="settings_app">DigiClock Settings</string>
 	<string name="theme_chooser_name">Theme Chooser</string>
 	<string name="launcher_chooser_name">Tap Launches ...</string>
 	<string name="text_settings_name">Text Settings</string>
+	<string name="news_name">DigiClock Update News</string>
+	
 	<string name="time_default">00</string>
 	<string name="time_default_full">00:00</string>
 	<string name="date_default">Sat, 31 Dec 2009</string>
@@ -28,9 +31,22 @@
 	<string name="text_color">Text Colour</string>
 	<string name="text_leading_zero">Hour Leading Zero</string>
 	<string name="text_date_enabled">Date Enabled</string>
-	<string name="text_typeface">Typeface</string>
+	<string name="text_typeface">Font</string>
 	<string name="text_time_size">Time Size</string>
 	<string name="text_date_size">Date Size</string>
+	
+	<string name="bg_alpha">Background transparency</string>
+	<string name="text_alpha">Text transparency</string>
+	
+	<string name="text_24hour">24 Hour (eg: 21:00)</string>
+	<string name="text_shadowEnabled">Text Shadow</string>
+	<string name="text_markerEnabled">AM/PM marker</string>
+	
+	<string name="hour_format">DigiClock setup - Time Format:</string>
+	<string-array name="time_options">
+		<item>12 hour ( 9:00 )</item>
+		<item>24 hour ( 21:00 )</item>
+	</string-array>
 	
 	<string name="text_fonterror">Theme doesn\'t support custom font</string>
 
@@ -39,46 +55,22 @@
 	<string name="date_year">Year</string>
 	<string name="date_seperator">Seperator</string>
 	
-	<string-array name="days">
-		<item>Sun</item>
-		<item>Mon</item>
-		<item>Tue</item>
-		<item>Wed</item>
-		<item>Thur</item>
-		<item>Fri</item>
-		<item>Sat</item>
-	</string-array>
-	
-	<string-array name="months">
-		<item>Jan</item>
-		<item>Feb</item>
-		<item>Mar</item>
-		<item>Apr</item>
-		<item>May</item>
-		<item>June</item>
-		<item>July</item>
-		<item>Aug</item>
-		<item>Sept</item>
-		<item>Oct</item>
-		<item>Nov</item>
-		<item>Dec</item>
-	</string-array>
 	<string-array name="colors">
-		<item>Black (No Custom Font)</item>
-		<item>White (No Custom Font)</item>
-		<item>Velvet (No Custom Font)</item>
-		<item>Pink (No Custom Font)</item>
-		<item>Blue (No Custom Font)</item>
-		<item>Red (No Custom Font)</item>
-		<item>Green (No Custom Font)</item>
-		<item>Ghost (No Custom Font)</item>
-		<item>Going Dutch (No Custom Font)</item>
-		<item>Orange (No Custom Font)</item>
-		<item>Clear (No Custom Font)</item>
+		<item>Black</item>
+		<item>White</item>
+		<item>Velvet</item>
+		<item>Pink</item>
+		<item>Blue</item>
+		<item>Red</item>
+		<item>Green</item>
+		<item>Ghost</item>
+		<item>Going Dutch</item>
+		<item>Orange</item>
 		<item>Clear</item>
-		<item>Yellow (No Custom Font)</item>
-		<item>Gold (No Custom Font)</item>
-		<item>Purple (No Custom Font)</item>
+		<item>Clear</item>
+		<item>Yellow</item>
+		<item>Gold</item>
+		<item>Purple</item>
 		<item>Solid White</item>
 		<item>Solid Black</item>
 		<item>Cloud</item>
@@ -91,29 +83,24 @@
 		<item>DigiSage</item>
 	</string-array>
 	
-	<string-array name="launchers">
-		<item>Alarm</item>
-		<item>Calendar</item>
-		<item>Browser</item>
-		<item>Theme Chooser</item>
-	</string-array>
-	
 	<string-array name="settings">
-		<item>Choose Theme</item>
+		<item>Themes</item>
 		<item>Tap Launches</item>
-		<item>Text Settings</item>
+		<item>Time/Text Settings</item>
 		<item>Date Format ( Beta )</item>
-		<item>Help!</item>
-		<item>Kit up the Dev</item>
+		<item>Donate</item>
+		<item>Help</item>
 	</string-array>
 	
-	<string-array name="typefaces">
-		<item>Normal</item>
-		<item>Sans</item>
-		<item>Serif</item>
-		<item>MonoSpace</item>
+	<string-array name="settings_desc">
+		<item>change the image</item>
+		<item>what happens widget is tapped</item>
+		<item>time options and text appearance</item>
+		<item>how the date is displayed</item>
+		<item>help out the dev</item>
+		<item>common questions and answers</item>
 	</string-array>
-	
+
 	<string name="load_tap_text">Loading app list</string>
 	<string name="load_tap_title">Loading</string>
 	
