@@ -1,0 +1,45 @@
+{
+  "name":"Normal",
+  "type":"builtin",
+  "location":"normal" 
+}
+{
+  "name":"Normal Bold",
+  "type":"builtin",
+  "location":"normal_bold" 
+}
+{
+  "name":"Sans",
+  "type":"builtin",
+  "location":"sans" 
+}
+{
+  "name":"Sans Serif",
+  "type":"builtin",
+  "location":"serif" 
+}
+{
+  "name":"Monospace",
+  "type":"builtin",
+  "location":"monospace" 
+}
+{ 
+  "name":"Molengo",
+  "type":"assets",
+  "location":"Molengo-Regular.ttf"
+}
+{ 
+  "name":"Lobster",
+  "type":"assets",
+  "location":"Lobster.ttf"
+}
+{ 
+  "name":"Orbitron",
+  "type":"assets",
+  "location":"Orbitron-Regular.ttf"
+}
+{ 
+  "name":"Ubuntu",
+  "type":"assets",
+  "location":"Ubuntu-Regular.ttf"
+} 
