@@ -1,149 +1,190 @@
-<LinearLayout android:id="@+id/LinearLayout01" 
-	android:layout_width="fill_parent" 
-	android:layout_height="fill_parent" 
-	xmlns:android="http://schemas.android.com/apk/res/android" 
-	android:orientation="vertical" android:padding="10dip">
-	
-	<LinearLayout android:id="@+id/LinearLayout12" 
-		android:layout_height="wrap_content" 
-		android:orientation="horizontal" 
-		android:layout_width="fill_parent">
-		
-		<TextView android:layout_height="wrap_content" 
-			android:text="@string/text_color" 
-			android:id="@+id/lColor" 
-			android:layout_gravity="center_vertical"
-			android:layout_width="wrap_content" 
-			android:layout_weight="2">
-		</TextView>	
-		
-		<Button android:layout_height="wrap_content" 
-			android:text="00:00"
-			android:shadowRadius="5"
-			android:shadowColor="#FF000000"
-			android:id="@+id/bColor" 
-			android:layout_gravity="center_vertical" 
-			android:layout_width="wrap_content"
-			android:layout_margin="10dip">
-		</Button>
-	
-	</LinearLayout>
-	
+<?xml version="1.0" encoding="utf-8"?>
 
-	
-	<!-- SeekBar android:layout_height="wrap_content" 
-		android:layout_width="fill_parent" 
-		android:clickable="true" 
-		android:id="@+id/sbColor" 
-		android:max="10">
-	</SeekBar-->
-	
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/ScrollViewMain"
+	android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+        
+	<LinearLayout android:id="@+id/LinearLayoutMain"
+		android:layout_width="fill_parent" android:layout_height="wrap_content"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:orientation="vertical" android:padding="5dip">
 
-
-	<LinearLayout android:id="@+id/LinearLayout02" 
-		android:layout_height="wrap_content" 
-		android:orientation="horizontal" 
-		android:layout_width="fill_parent">
-	
-		<TextView android:layout_height="wrap_content" 
-			android:id="@+id/lLeadingZero" 
-			android:text="@string/text_leading_zero" 
-			android:layout_gravity="center_vertical"
-			android:layout_width="wrap_content" 
-			android:layout_weight="2">
-		</TextView>
-		
-		<ToggleButton android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:layout_gravity="center_vertical" 
-			android:layout_margin="10dip" 
-			android:id="@+id/tbLeadingZero">
-		</ToggleButton>
-	
-	</LinearLayout>
-	
-	<LinearLayout android:layout_height="wrap_content" 
-		android:orientation="horizontal" 
-		android:layout_width="fill_parent" 
-		android:id="@+id/LinearLayout03">
-		
-		<TextView android:layout_height="wrap_content" 
-			android:layout_gravity="center_vertical" 
-			android:layout_width="wrap_content" 
-			android:layout_weight="2" 
-			android:id="@+id/lDateEnabled" 
-			android:text="@string/text_date_enabled">
-		</TextView>
-		
-		<ToggleButton android:layout_width="wrap_content" 
-			android:layout_height="wrap_content" 
-			android:layout_gravity="center_vertical" 
-			android:layout_margin="10dip" 
-			android:checked="true" 
-			android:id="@+id/tbDateEnabled">
-		</ToggleButton>
-		
-	</LinearLayout>
-	
-	<LinearLayout android:layout_height="wrap_content" 
-		android:orientation="vertical" 
-		android:layout_width="fill_parent" 
-		android:id="@+id/LinearLayout04">
-		
-		<TextView android:layout_height="wrap_content" 
-			android:layout_gravity="center_vertical" 
-			android:layout_width="wrap_content" 
-			android:layout_weight="2" 
-			android:id="@+id/lTypeface" 
-			android:text="@string/text_typeface">
-		</TextView>
-		
-		<Spinner android:id="@+id/sTypeface"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"
-	        android:drawSelectorOnTop="true"
-	        android:prompt="@string/text_typeface">
-        </Spinner>
-		
-	</LinearLayout>
-	
-	<LinearLayout android:layout_height="wrap_content" 
-		android:orientation="vertical" 
-		android:layout_width="fill_parent" 
-		android:id="@+id/LinearLayout05">
-
-		<TextView android:layout_height="wrap_content" 
-			android:text="@string/text_time_size" 
-			android:id="@+id/lTimeSize" 
+		<LinearLayout android:id="@+id/LinearLayoutColor"
+			android:layout_height="wrap_content" android:orientation="horizontal"
 			android:layout_width="fill_parent">
-		</TextView>
-		
-		<SeekBar android:layout_height="wrap_content" 
-			android:layout_width="fill_parent" 
-			android:clickable="true" 
-			android:id="@+id/sbTimeSize" 
-			android:max="52">
-		</SeekBar>
-		
-	</LinearLayout>
-	
-	<LinearLayout android:layout_height="wrap_content" 
-		android:orientation="vertical" 
-		android:layout_width="fill_parent" 
-		android:id="@+id/LinearLayout06">
 
-		<TextView android:layout_height="wrap_content" 
-			android:text="@string/text_date_size" 
-			android:id="@+id/lDateSize" 
+			<TextView android:layout_height="wrap_content" android:text="@string/text_color"
+				android:id="@+id/lColor" android:layout_gravity="center_vertical"
+				android:layout_width="wrap_content" android:layout_weight="2">
+			</TextView>
+
+			<Button android:layout_height="wrap_content" android:text="00:00"
+				android:shadowRadius="5" android:shadowColor="#FF000000" android:id="@+id/bColor"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_margin="10dip">
+			</Button>
+
+		</LinearLayout>
+
+		<LinearLayout android:id="@+id/LinearLayoutLeadingZero"
+			android:layout_height="wrap_content" android:orientation="horizontal"
 			android:layout_width="fill_parent">
-		</TextView>
+
+			<TextView android:layout_height="wrap_content" android:id="@+id/lLeadingZero"
+				android:text="@string/text_leading_zero" android:layout_gravity="center_vertical"
+				android:layout_width="wrap_content" android:layout_weight="2">
+			</TextView>
+
+			<ToggleButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_margin="10dip" android:id="@+id/tbLeadingZero">
+			</ToggleButton>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="horizontal" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutDate">
+
+			<TextView android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_weight="2" android:id="@+id/lDateEnabled"
+				android:text="@string/text_date_enabled">
+			</TextView>
+
+			<ToggleButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_margin="10dip" android:checked="true" android:id="@+id/tbDateEnabled">
+			</ToggleButton>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="horizontal" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutTwelve">
+
+			<TextView android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_weight="2" android:id="@+id/l24hour" android:text="@string/text_24hour">
+			</TextView>
+
+			<ToggleButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_margin="10dip" android:checked="true" android:id="@+id/tb24Hour">
+			</ToggleButton>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="horizontal" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutShadow">
+
+			<TextView android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_weight="2" android:id="@+id/lshadowEnabled"
+				android:text="@string/text_shadowEnabled">
+			</TextView>
+
+			<ToggleButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_margin="10dip" android:checked="true" android:id="@+id/tbShadowEnabled">
+			</ToggleButton>
+
+		</LinearLayout>
 		
-		<SeekBar android:layout_height="wrap_content" 
-			android:layout_width="fill_parent" 
-			android:clickable="true" 
-			android:id="@+id/sbDateSize" 
-			android:max="52">
-		</SeekBar>
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="horizontal" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutMarker">
+
+			<TextView android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_weight="2" android:id="@+id/lMarker"
+				android:text="@string/text_markerEnabled">
+			</TextView>
+
+			<ToggleButton android:layout_width="wrap_content"
+				android:layout_height="wrap_content" android:layout_gravity="center_vertical"
+				android:layout_margin="10dip" android:checked="true" android:id="@+id/tbMarkerEnabled">
+			</ToggleButton>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutTypeface">
+
+			<TextView android:layout_height="wrap_content"
+				android:layout_gravity="center_vertical" android:layout_width="wrap_content"
+				android:layout_weight="2" android:id="@+id/lTypeface" android:text="@string/text_typeface">
+			</TextView>
+
+			<Spinner android:id="@+id/sTypeface" android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:drawSelectorOnTop="true"
+				android:prompt="@string/text_typeface">
+			</Spinner>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutTimeSize">
+
+			<TextView android:layout_height="wrap_content" android:text="@string/text_time_size"
+				android:id="@+id/lTimeSize" android:layout_width="fill_parent">
+			</TextView>
+
+			<SeekBar android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:clickable="true"
+				android:id="@+id/sbTimeSize" android:max="58">
+			</SeekBar>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutDateSize">
+
+			<TextView android:layout_height="wrap_content" android:text="@string/text_date_size"
+				android:id="@+id/lDateSize" android:layout_width="fill_parent">
+			</TextView>
+
+			<SeekBar android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:clickable="true"
+				android:id="@+id/sbDateSize" android:max="52">
+			</SeekBar>
+
+		</LinearLayout>
+			
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutBGAlpha">
+
+			<TextView android:layout_height="wrap_content" android:text="@string/bg_alpha"
+				android:id="@+id/lBgAlpha" android:layout_width="fill_parent">
+			</TextView>
+
+			<SeekBar android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:clickable="true"
+				android:id="@+id/sbBgAlpha" android:max="255">
+			</SeekBar>
+
+		</LinearLayout>
+
+		<LinearLayout android:layout_height="wrap_content"
+			android:orientation="vertical" android:layout_width="fill_parent"
+			android:id="@+id/LinearLayoutTextAlpha">
+
+			<TextView android:layout_height="wrap_content" android:text="@string/text_alpha"
+				android:id="@+id/lTextAlpha" android:layout_width="fill_parent">
+			</TextView>
+
+			<SeekBar android:layout_height="wrap_content"
+				android:layout_width="fill_parent" android:clickable="true"
+				android:id="@+id/sbTextAlpha" android:max="255">
+			</SeekBar>
+
+		</LinearLayout>
 		
 	</LinearLayout>
-</LinearLayout>
+</ScrollView>

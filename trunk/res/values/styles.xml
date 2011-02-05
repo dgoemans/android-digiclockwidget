@@ -5,46 +5,6 @@
     <style name="WidgetBackground">
         <item name="android:background">@drawable/widget_bg</item>
     </style>
- 
- 	<style name="Yellow_Port">
- 		<item name="android:background">@drawable/widget_half_yellow</item>
- 		<item name="android:textSize">58sp</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textStyle">bold</item>
- 	</style>
- 	
-	<style name="Yellow_Land">
- 		<item name="android:background">@drawable/widget_bg_yellow</item>
-		<item name="android:textSize">50sp</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textStyle">bold</item>
- 	</style>
- 	
- 	<style name="Yellow_Date">
- 		<item name="android:background">@drawable/date_bg_yellow</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
-    
-
- 	<style name="Gold_Port">
- 		<item name="android:background">@drawable/widget_half_gold</item>
- 		<item name="android:textSize">58sp</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textStyle">bold</item>
- 	</style>
-	<style name="Gold_Land">
- 		<item name="android:background">@drawable/widget_bg_gold</item>
-		<item name="android:textSize">50sp</item>
-        <item name="android:textColor">@android:color/black</item>
-        <item name="android:textStyle">bold</item>
- 	</style>
- 	
- 	<style name="Gold_Date">
- 		<item name="android:background">@drawable/date_bg_gold</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@android:color/black</item>
-    </style>
     
     <style name="Text_MonoSpace">
     	<item name="android:text">@string/time_default_full</item>
