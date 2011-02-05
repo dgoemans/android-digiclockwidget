@@ -10,7 +10,6 @@ public class DigiTheme
 		this.URL = null;
 		this.Price = 0;
 		
-		this.LayoutResourceID = -1;
 		this.ImageResourceID = -1;
 		this.ImageLocation = null;
 	}
@@ -25,7 +24,6 @@ public class DigiTheme
 	public DigiTheme clone()
 	{
 		DigiTheme clone = new DigiTheme(Name,Creator,URL,Price);
-		clone.LayoutResourceID = LayoutResourceID;
 		clone.ImageResourceID = ImageResourceID;
 		clone.ImageLocation = ImageLocation;
 		

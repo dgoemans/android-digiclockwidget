@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.zip.GZIPInputStream;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -19,6 +20,7 @@ import org.json.JSONTokener;
 import android.app.PendingIntent;
 import android.app.PendingIntent.CanceledException;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -26,15 +28,46 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.graphics.Bitmap.CompressFormat;
+import android.graphics.Paint.Align;
 import android.os.PowerManager;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.widget.RemoteViews;
 
 public class UpdateFunctions 
 {
+	static int[][] legacyThemes = 
+	{
+			{
+				R.drawable.widget_bg, R.drawable.widget_bg_white, 
+				R.drawable.widget_bg_velvet, R.drawable.widget_bg_pink,
+				R.drawable.widget_bg_blue, R.drawable.widget_bg_red,
+				R.drawable.widget_bg_green, R.drawable.widget_bg_ghost, 
+				R.drawable.widget_bg_dutch, R.drawable.widget_bg_orange, 
+				R.drawable.blank, R.drawable.blank,
+				R.drawable.widget_bg_yellow, R.drawable.widget_bg_gold, 
+				R.drawable.widget_bg_purple
+			},
+			{ 
+				R.drawable.date_bg, R.drawable.date_bg_white,
+				R.drawable.date_bg_velvet, R.drawable.date_bg_pink,
+				R.drawable.date_bg_blue, R.drawable.date_bg_red,
+				R.drawable.date_bg_green, R.drawable.date_bg_ghost,
+				R.drawable.date_bg_orange, R.drawable.date_bg_orange,
+				R.drawable.blank, R.drawable.blank, 
+				R.drawable.date_bg_yellow, R.drawable.date_bg_gold, 
+				R.drawable.date_bg_purple,
+			}
+			
+	};
 	
 	public static class LayoutInfo
 	{
@@ -49,7 +82,7 @@ public class UpdateFunctions
 		int backgroundImageId;
 		String backgroundImagePath;
 	}
-
+	
 	static LayoutInfo GetLayoutFromColorId( int colorId, String typeface, String backgroudPath)
 	{
 		LayoutInfo info = new LayoutInfo();
@@ -59,52 +92,11 @@ public class UpdateFunctions
 		info.layoutId = R.layout.main;
 		switch( colorId )
 		{
-		case 0:
-			info.layoutId = R.layout.main;
-			break;
-		case 1:
-			info.layoutId = R.layout.white;
-			break;
-		case 2:
-			info.layoutId = R.layout.velvet;
-			break;
-		case 3:
-			info.layoutId = R.layout.pink;
-			break;
-		case 4:
-			info.layoutId = R.layout.blue;
-			break;
-		case 5:
-			info.layoutId = R.layout.red;
-			break;
-		case 6:
-			info.layoutId = R.layout.green;
-			break;
-		case 7:
-			info.layoutId = R.layout.ghost;
-			break;
-		case 8:
-			info.layoutId = R.layout.dutch;
-			break;
-		case 9:
-			info.layoutId = R.layout.orange;
-			break;
-		case 10:
-			info.layoutId = R.layout.clear_black;
-			break;	
 		case 11:
+		case 10:
 			info.backgroundImageId = R.drawable.blank;
 			info.layoutId = layoutFromTypeFace(typeface);
 			break;	
-		case 12:
-			info.layoutId = R.layout.yellow;
-			break;	
-		case 13:
-			info.layoutId = R.layout.gold;
-			break;
-		case 14:
-			info.layoutId = R.layout.purple;
-			break;
 		case 15:
 			info.backgroundImageId = R.drawable.widget_solid_white;
 			info.layoutId = layoutFromTypeFace(typeface);
@@ -193,17 +185,247 @@ public class UpdateFunctions
 		return (String) DateFormat.format(outString, new Date());//frmt.format(now);
 	}
 	
-	public static RemoteViews buildUpdate(Context context, boolean twelve ) 
+	static String GetFormattedTime(SharedPreferences prefs)
 	{
+		boolean twelve = prefs.getBoolean("twelvehour", true);
+		String timeFormat = "HH:mm";
+		if( twelve )
+		{
+			
+			if( !prefs.getBoolean("leadingZero", true) )
+			{
+				timeFormat = "h:mm";
+			}
+			else
+			{
+				timeFormat = "hh:mm";
+			}
+		}
+		else
+		{
+			if( !prefs.getBoolean("leadingZero", true) )
+			{
+				timeFormat = "H:mm";
+			}
+			else
+			{
+				timeFormat = "HH:mm";
+			}	
+		}
+		
+		SimpleDateFormat frmt = new SimpleDateFormat(timeFormat);
+		Date now = new Date();
+		return frmt.format(now);
+	}
+	
+	
+	public static RemoteViews buildUpdate(Context context, int id ) 
+	{
+		AppWidgetProviderInfo inf = AppWidgetManager.getInstance(context).getAppWidgetInfo(id);
+		
+		// Double size of everything
+		float scale = inf.minHeight == 219 ? 1.5f : 1f;
+
+		float sizeMultiplier = context.getResources().getDisplayMetrics().density * scale;
+		float fontSizeMultiplier = context.getResources().getDisplayMetrics().scaledDensity * scale;
+		
+		// Constants
+		float canvasWidth = 160;
+		float canvasHeight = 100;
+		float dateWidth = 144;
+		float dateHeight = 21;
+		float padding = 5;
+		
+		Log.d("DigiClock", "Updating with ID: " + id);
+		
 		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);		
+		
+		// Properties
 		int color = prefs.getInt("colorId", 0);
+		int bgAlpha = prefs.getInt("bgAlpha", 255);
+		int textAlpha = prefs.getInt("textAlpha", 255);
+		int textColor = prefs.getInt("textColor", Color.WHITE);
+		
 		String typeface = prefs.getString("typeface", "normal");
 		String backgroudPath = prefs.getString("bgPath", null);
 
 		LayoutInfo info = UpdateFunctions.GetLayoutFromColorId(color, typeface, backgroudPath);
 		
-		RemoteViews views = new RemoteViews(context.getPackageName(), info.layoutId);
+		RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.base_normal);
 		
+		Bitmap myBitmap = Bitmap.createBitmap((int)(canvasWidth*sizeMultiplier), 
+				(int)(canvasHeight*sizeMultiplier), 
+				Bitmap.Config.ARGB_8888);
+		
+        Canvas myCanvas = new Canvas(myBitmap);
+        Paint paint = new Paint();
+        
+        boolean legacy = false; 
+        float legacyOffset = 0;
+        
+        paint.setSubpixelText(true);
+    	paint.setAntiAlias(true);
+        
+    	paint.setAlpha(bgAlpha);
+    	
+        if(info.backgroundImagePath != null)
+        {
+        	Bitmap background = BitmapFactory.decodeFile(info.backgroundImagePath);
+        	myCanvas.drawBitmap(Bitmap.createScaledBitmap(background, myBitmap.getWidth(), myBitmap.getHeight(), true), 
+	    			0, 
+	    			0, 
+	    			paint);
+        	
+        }
+        else if(info.backgroundImageId != -1)
+        {
+        	// TODO: Refactor into function like:
+        	// drawBackground(sourceBitmap, canvas, paint, targetBitmap );
+        	// OR: Bitmap getBackgroundFromInfo( LayoutInfo info )
+        	Bitmap background = BitmapFactory.decodeResource(context.getResources(), info.backgroundImageId);
+        	myCanvas.drawBitmap(Bitmap.createScaledBitmap(background, myBitmap.getWidth(), myBitmap.getHeight(), false), 
+	    			0, 
+	    			0, 
+	    			paint);	
+        }
+        else 
+        {
+        	legacy = true;
+        	legacyOffset = 10;
+        	
+        	Bitmap background = BitmapFactory.decodeResource(context.getResources(), legacyThemes[0][color]);
+        	myCanvas.drawBitmap(Bitmap.createScaledBitmap(background, myBitmap.getWidth(), myBitmap.getHeight(), false), 
+	    			0, 
+	    			0, 
+	    			paint);
+        	
+        	Bitmap datebg = BitmapFactory.decodeResource(context.getResources(), legacyThemes[1][color]);
+        	myCanvas.drawBitmap(Bitmap.createScaledBitmap(datebg, 
+        			(int)(dateWidth*sizeMultiplier), 
+        			(int)(dateHeight*sizeMultiplier), false),
+        			0.5f*(canvasWidth - dateWidth)*sizeMultiplier,
+					(canvasHeight - dateHeight)*sizeMultiplier,
+	    			paint);
+        }
+
+        
+        Typeface clock;
+
+        if(typeface.equalsIgnoreCase("normal"))
+        {
+        	clock = Typeface.DEFAULT;
+        }
+        else if(typeface.equalsIgnoreCase("normal_bold"))
+        {
+        	clock = Typeface.DEFAULT_BOLD;
+        }
+        else if(typeface.equalsIgnoreCase("sans"))
+        {
+        	clock = Typeface.SANS_SERIF;
+        }
+        else if(typeface.equalsIgnoreCase("serif"))
+        {
+        	clock = Typeface.SERIF;	
+        }
+        else if(typeface.equalsIgnoreCase("monospace"))
+        {
+        	clock = Typeface.MONOSPACE;
+        }
+        else
+        {
+        	try
+        	{
+        		clock = Typeface.createFromAsset(context.getAssets(),typeface);
+        	}
+        	catch( RuntimeException e )
+        	{
+        		clock = Typeface.DEFAULT_BOLD;
+        	}
+        }
+        paint.setAntiAlias(true);
+        paint.setSubpixelText(false);
+
+        paint.setTypeface(clock);
+        paint.setStyle(Paint.Style.FILL);
+        
+        paint.setColor(textColor);
+        paint.setAlpha(textAlpha);
+        
+        paint.setTextAlign(Align.CENTER);
+        
+        if(  prefs.getBoolean("shadowEnabled", true) )
+        {
+        	int shadowColor = Color.argb(textAlpha, 0, 0, 0);
+        	paint.setShadowLayer(2*sizeMultiplier, 1*sizeMultiplier, 1*sizeMultiplier, shadowColor);
+        }
+        
+		float textTimeSize = prefs.getFloat("textTimeSize", 52);		
+		paint.setTextSize(textTimeSize * fontSizeMultiplier);
+		
+		String timeString = GetFormattedTime(prefs);
+		
+		int yPosition = 65;
+		
+		if( legacy )
+		{
+			int seperatorIndex = timeString.indexOf(':');
+			
+			myCanvas.drawText(timeString.substring(0, seperatorIndex), 
+	        		0.25f*canvasWidth*sizeMultiplier, 
+	        		yPosition*sizeMultiplier, paint);
+			myCanvas.drawText(timeString.substring(seperatorIndex+1),
+					0.75f*canvasWidth*sizeMultiplier, 
+	        		yPosition*sizeMultiplier, paint);
+		}
+		else
+		{
+			myCanvas.drawText(timeString, 
+        		0.5f*canvasWidth*sizeMultiplier, 
+        		yPosition*sizeMultiplier, paint);
+		}
+        
+		boolean amPmMarkerEnabled = prefs.getBoolean("amPmMarkerEnabled", true);
+		if( amPmMarkerEnabled )
+		{
+			float markerSize = prefs.getFloat("amPmSize", 20);		
+			paint.setTextSize(markerSize * fontSizeMultiplier);
+			
+			
+			SimpleDateFormat fmt = new SimpleDateFormat("a");
+			String marker = fmt.format(new Date());
+			
+			float width = paint.measureText(marker);
+			
+			myCanvas.drawText(marker, 
+					(canvasWidth - padding)*sizeMultiplier - width/2, 
+					22 * sizeMultiplier, 
+					paint);
+		}
+
+		boolean dateEnabled = prefs.getBoolean("dateEnabled", true);
+		if( dateEnabled )
+		{
+			float textDateSize = prefs.getFloat("textDateSize", 14);
+			paint.setTextSize(textDateSize * fontSizeMultiplier);
+			
+			String format = prefs.getString("dateFormat", DateFormatChooser.DefaultFormat);
+			
+			myCanvas.drawText(UpdateFunctions.GetDateWithFormat(format), 
+					80*sizeMultiplier, 
+					(85+legacyOffset)*sizeMultiplier, 
+					paint);
+		}
+        
+        views.setImageViewBitmap(R.id.background, myBitmap);
+        
+        views.setViewVisibility(R.id.date, View.INVISIBLE);
+        views.setViewVisibility(R.id.time, View.INVISIBLE);
+        
+        AttachIntentToView(context, views);
+        
+        return views;
+        
+		/*
 		Log.d("DigiClock","Backgroud image: "+ info.backgroundImagePath + " and ID: " + info.backgroundImageId);
 		
 		if( info.backgroundImageId != -1 )
@@ -230,6 +452,7 @@ public class UpdateFunctions
 			int textColor = prefs.getInt("textColor", 0);
 			if( textColor != 0 )
 			{
+				
 				views.setTextColor(R.id.date, textColor);
 				views.setTextColor(R.id.time, textColor);
 			}
@@ -344,8 +567,17 @@ public class UpdateFunctions
 	    	views.setTextViewText(R.id.date, outString );
 	    	
 		}
-
 		
+		AttachIntentToView(context, views);
+		
+		return views;
+		
+		*/
+	}
+	
+	private static void AttachIntentToView(Context context, RemoteViews view)
+	{
+		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		int launcherId = prefs.getInt("launcherId", 0);
 		String launcherPackage = prefs.getString("launcherPackage", "");
 		
@@ -394,15 +626,13 @@ public class UpdateFunctions
 		}
         
         PendingIntent pendingIntent = PendingIntent.getActivity(context,0, defineIntent, 0);
-        views.setOnClickPendingIntent(R.id.widget, pendingIntent);
-                
-		return views;
-	}
+        view.setOnClickPendingIntent(R.id.widget, pendingIntent);
+	}	
 	
-	static void LaunchSettingsApp(Context context)
+	static boolean LaunchSettingsApp(Context context)
 	{
 		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
-		if( prefs.getBoolean("settingsShown", false) ) return;
+		if( prefs.getBoolean("settingsShown", false) ) return false;
 		
  		// Every time added, launch settings
  		try 
@@ -413,12 +643,90 @@ public class UpdateFunctions
  		catch (CanceledException e) 
 		{
 			e.printStackTrace();
+			return false;
 		}
- 		
- 		
+ 	
  		SharedPreferences.Editor ed = prefs.edit();
  		ed.putBoolean("settingsShown", true);
 		ed.commit();
+		
+		return true;
+	}
+	
+	public static boolean LaunchActivity(Context context, Class toLaunch)
+	{
+ 		try 
+ 		{
+ 			PendingIntent pendingIntent = PendingIntent.getActivity(context,0, new Intent(context, toLaunch), 0);
+			pendingIntent.send();
+		} 
+ 		catch (CanceledException e) 
+		{
+			e.printStackTrace();
+			return false;
+		}
+ 		
+ 		return true;
+	}
+	
+	/*
+	public static boolean LaunchNewsApp(Context context)
+	{
+ 		try 
+ 		{
+ 			PendingIntent pendingIntent = PendingIntent.getActivity(context,0, new Intent(context, News.class), 0);
+			pendingIntent.send();
+		} 
+ 		catch (CanceledException e) 
+		{
+			e.printStackTrace();
+			return false;
+		}
+ 		
+ 		return true;
+	}
+	*/
+	
+	public static String GetDataFromStream(InputStream stream)
+	{
+    	int size = 1000;
+    	byte[] data = new byte[size];
+    	
+    	int i=0;
+    	int dataValue = 0;
+    	while(dataValue != -1)
+    	{
+    		try 
+    		{
+				dataValue = stream.read();
+			}
+    		catch (IOException e) 
+    		{
+    			Log.d("DigiClock", "Data stream corrupt");
+				e.printStackTrace();
+			}
+
+    		data[i] = (byte)dataValue;
+    		
+    		i++;
+    		
+    		// If we've gone over the limit, expand the array
+    		if( i >= size )
+    		{
+    			size *= 2;
+    			byte[] newData = new byte[size];
+    			int j = 0;
+    			for(byte cur : data)
+    			{
+    				newData[j] = cur;
+    				j++;
+    			}
+    			data = newData;
+    		}
+    	}
+    	
+    	
+    	return new String(data, 0, data.length);
 	}
 
 	public static List<DigiTheme> getOnlineThemes()
@@ -430,42 +738,17 @@ public class UpdateFunctions
 		
 		try
 		{
-			site = new URL("http://davidgoemans.com/DigiClock/list_themes.php?device=1");
+			site = new URL("http://dgoemans.com/DigiClock/list_themes.php?device&compressed");
+			
 	    	conn = (HttpURLConnection)site.openConnection();
 			conn.setDoInput(true);
 	    	conn.connect();
 	    	
 	    	stream = conn.getInputStream();
 	    	
-	    	int size = 10000;
-	    	byte[] data = new byte[size];
+	    	GZIPInputStream zip = new GZIPInputStream(stream);
 	    	
-	    	int i=0;
-	    	int dataValue = 0;
-	    	while(dataValue != -1)
-	    	{
-	    		dataValue = stream.read();
-	    		data[i] = (byte)dataValue;
-	    		
-	    		i++;
-	    		
-	    		// If we've gone over the limit, expand the array
-	    		if( i >= size )
-	    		{
-	    			size *= 2;
-	    			byte[] newData = new byte[size];
-	    			int j = 0;
-	    			for(byte cur : data)
-	    			{
-	    				newData[j] = cur;
-	    			}
-	    			data = newData;
-	    		}
-	    	}
-	    	
-	    	String dataString = new String(data, 0, data.length);
-	    	
-	    	//Log.d("DigiClock","Data: " + dataString);
+	    	String dataString = GetDataFromStream(zip);
 	    		    	
 	    	JSONTokener tokener = new JSONTokener(dataString);
 	    	
@@ -483,7 +766,7 @@ public class UpdateFunctions
 		}
 		catch(Exception e)
 		{
-			Log.w("DigiClock", "Couldn't download bitmap" + e.getMessage());
+			Log.w("DigiClock", "Couldn't download theme " + e.getMessage());
 		}
 		finally
 		{
@@ -513,14 +796,13 @@ public class UpdateFunctions
     		Bitmap bmp = getBitmapFromURL(theme.URL);
     		
     		if( bmp == null ) return null;
+			
+    		theme.ImageLocation = context.getFilesDir() + "/" + theme.Name + ".png";
     		
-    		Log.d("DigiClock", "Gonna write: " + context);
-			
+    		if( context.getFileStreamPath(theme.Name + ".png").exists() )
+    			return theme.ImageLocation;
+    		
 			os = context.openFileOutput(theme.Name + ".png", Context.MODE_PRIVATE);
-			
-			theme.ImageLocation = context.getFilesDir() + "/" + theme.Name + ".png";
-			
-			Log.d("DigiClock", "Image location: " + theme.ImageLocation );
 			
     		bmp.compress(CompressFormat.PNG, 5, os);
     		
@@ -603,7 +885,7 @@ public class UpdateFunctions
     	return minute != prevMinute;
 	}
 	
-	public static UpdateType UpdateWidget(Context context, Class<?> cls)
+	public static UpdateType UpdateWidget(Context context)
     {
     	SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
     	
@@ -617,21 +899,55 @@ public class UpdateFunctions
     		return UpdateType.NotRequired;
     	}
 		
- 		SharedPreferences.Editor ed = prefs.edit();		
+		int version = prefs.getInt("version", 0);
+		int newVersion = 0;
+		try 
+		{
+			newVersion = context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionCode;
+		} 
+		catch (NameNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		
+ 		SharedPreferences.Editor ed = prefs.edit();
+ 		
+ 		if( version < newVersion )
+		{
+ 			LaunchActivity(context, News.class);
+			ed.putInt("version", newVersion);
+			Log.d("DigiClock", "New Version: " + newVersion);
+		}
+ 		
+ 		if( !prefs.contains("twelvehour") )
+ 		{
+ 			LaunchActivity(context, TimeSelector.class);
+ 		}
+ 		
 		ed.putBoolean("invalidate", false);
 		ed.commit();
 		
     	prevMinute = minute;
-    	
-    	boolean twelve = prefs.getBoolean("twelvehour", true);
-        RemoteViews updateViews = UpdateFunctions.buildUpdate(context, twelve);
-        
-        AppWidgetManager manager = AppWidgetManager.getInstance(context);
 
-        // Push update for all sized widgets to home screen    
-        ComponentName thisWidget = new ComponentName(context, cls);
-        manager.updateAppWidget(thisWidget, updateViews);
+        UpdateWidgetsOfType(context, SimpleClockWidget.class);
+        UpdateWidgetsOfType(context, SimpleClockWidgetTwelve.class);
+        UpdateWidgetsOfType(context, SimpleClockWidgetLarge.class);
+
         
         return invalidated ? UpdateType.Invalidated : UpdateType.TimeChange;
     }
+	
+	static void UpdateWidgetsOfType(Context context, Class<?> cls)
+	{
+		RemoteViews views = null;
+		
+		AppWidgetManager manager = AppWidgetManager.getInstance(context);
+		
+		ComponentName widgets = new ComponentName(context, cls);
+		for( int id : manager.getAppWidgetIds(widgets) )
+        {
+			views = UpdateFunctions.buildUpdate(context, id);
+        	manager.updateAppWidget(id, views);
+        }
+	}
 }

@@ -36,7 +36,8 @@ class UpdateTimer implements Runnable
 		
 		SharedPreferences prefs = context.getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		boolean twelve = prefs.getBoolean("twelvehour", true);
-		UpdateFunctions.UpdateWidget(context, twelve ? SimpleClockWidgetTwelve.class : SimpleClockWidget.class);
+		
+		UpdateFunctions.UpdateWidget(context);
 		
 		if( handler != null )
 		{

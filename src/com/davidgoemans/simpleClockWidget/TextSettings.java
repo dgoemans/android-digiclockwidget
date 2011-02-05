@@ -1,5 +1,16 @@
 package com.davidgoemans.simpleClockWidget;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
 import yuku.ambilwarna.AmbilWarnaDialog;
 import yuku.ambilwarna.AmbilWarnaDialog.*;
 
@@ -7,6 +18,7 @@ import yuku.ambilwarna.AmbilWarnaDialog.*;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,24 +50,52 @@ public class TextSettings extends Activity
 		Color.RED,
 		Color.YELLOW
 	};
-	
-	String[] typeFaces = 
+
+	public static class FontInfo
 	{
-		"normal",
-		"sans",
-		"serif",
-		"monospace"
-	};
+		public String Name;
+		public String Type;
+		public String Location;
+
+		public static List<FontInfo> FromJsonFile(String data)
+		{
+			List<FontInfo> infoList = new ArrayList<FontInfo>();
+			
+			try 
+			{
+				JSONTokener tokener = new JSONTokener(data);
+				
+				while(tokener.more())
+		    	{
+		    		JSONObject cur;
+					
+					cur = (JSONObject)tokener.nextValue();
 	
+		    		FontInfo font = new FontInfo();
+		    		font.Name = cur.getString("name");
+		    		font.Type = cur.getString("type");
+		    		font.Location = cur.getString("location");
+	
+		    		infoList.add(font);
+		    	}
+			}
+			catch(Exception e)
+			{
+				Log.d("DigiClock", "Couldn't load fonts: " + e.getMessage());
+			}
+			
+			return infoList;
+			
+		}
+	}
 	
 	private int m_textColor = 0;
-	private boolean m_leadingZero = true;
-	private boolean m_dateEnabled = true;
 	private String m_typeface = "normal";
 	
 	private float m_timeSize = 52;
 	private float m_dateSize = 14;
-	
+
+	List<FontInfo> m_fontInfoList = null;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -63,11 +103,21 @@ public class TextSettings extends Activity
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.textsettings);
+		
+		try
+		{
+			String data = UpdateFunctions.GetDataFromStream(getAssets().open("fonts.json"));
+			m_fontInfoList = FontInfo.FromJsonFile(data);
+		}
+		catch(IOException e)
+		{
+			Log.d("DigiClock","IO Exception reading fonts: " + e.getLocalizedMessage());
+		}
 
 		SeekBar sb;
 		
 		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
-		m_textColor = prefs.getInt("textColor", 0);
+		m_textColor = prefs.getInt("textColor", Color.WHITE);
 		
 		Button button = (Button)findViewById(R.id.bColor);
 		button.setOnClickListener(new OnClickListener() {
@@ -80,28 +130,41 @@ public class TextSettings extends Activity
 		
 		updateTextColor();
 		
-		m_leadingZero = prefs.getBoolean("leadingZero", true);
-		
 		ToggleButton tb = (ToggleButton)findViewById(R.id.tbLeadingZero);
-		tb.setChecked(m_leadingZero);
-		
-		m_dateEnabled = prefs.getBoolean("dateEnabled", true);
+		tb.setChecked(prefs.getBoolean("leadingZero", true));
 		
 		tb = (ToggleButton)findViewById(R.id.tbDateEnabled);
-		tb.setChecked(m_dateEnabled);
+		tb.setChecked(prefs.getBoolean("dateEnabled", true));
+		
+		tb = (ToggleButton)findViewById(R.id.tb24Hour);
+		tb.setChecked(!prefs.getBoolean("twelvehour", true));	
+		
+		tb = (ToggleButton)findViewById(R.id.tbShadowEnabled);
+		tb.setChecked(prefs.getBoolean("shadowEnabled", true));
+		
+		tb = (ToggleButton)findViewById(R.id.tbMarkerEnabled);
+		tb.setChecked(prefs.getBoolean("amPmMarkerEnabled", true));
 		
 		// Typeface Spinner		
-		m_typeface = prefs.getString("typeface", typeFaces[0]);
+		m_typeface = prefs.getString("typeface", m_fontInfoList.get(0).Location);
+		
+		String[] fontNames = new String[m_fontInfoList.size()];
+		
+		for(int i=0; i<m_fontInfoList.size(); i++)
+		{
+			fontNames[i] = m_fontInfoList.get(i).Name;
+		}
+		
+		ArrayAdapter<CharSequence> adapter = 
+			new ArrayAdapter<CharSequence>(this, android.R.layout.simple_spinner_item, fontNames);
 		
 		Spinner typeface = (Spinner) findViewById(R.id.sTypeface);
-	    ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-	            this, R.array.typefaces, android.R.layout.simple_spinner_item);
 	    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 	    typeface.setAdapter(adapter);
 	    
-	    for( int i=0; i<typeFaces.length; i++ )
+	    for( int i=0; i<m_fontInfoList.size(); i++ )
 		{
-	    	if( typeFaces[i].equalsIgnoreCase(m_typeface) )
+	    	if( m_fontInfoList.get(i).Location.equalsIgnoreCase(m_typeface) )
 	    	{
 	    		typeface.setSelection(i);
 	    		break;
@@ -111,11 +174,7 @@ public class TextSettings extends Activity
 	    TextView title = (TextView) findViewById(R.id.lTypeface);
 		title.setText(R.string.text_typeface);
 	    
-	    int theme = prefs.getInt("colorId", 0);
-	    boolean pathExists = prefs.contains("bgPath");
-	    
 		// Font size numerical selects
-		
 		m_timeSize = prefs.getFloat("textTimeSize", 52);
 		m_dateSize = prefs.getFloat("textDateSize", 14);
 		
@@ -127,11 +186,11 @@ public class TextSettings extends Activity
 		sb.setOnSeekBarChangeListener(m_dateSizePicked);
 		sb.setProgress((int)m_dateSize);
 		
-		// For legacy themes, disable the spinner
-		if( theme < 15 && theme != 11 && !pathExists )
-		{
-			disableFontComponents();
-		}
+		sb = (SeekBar)findViewById(R.id.sbBgAlpha);
+		sb.setProgress(prefs.getInt("bgAlpha", 255));
+		
+		sb = (SeekBar)findViewById(R.id.sbTextAlpha);
+		sb.setProgress(prefs.getInt("textAlpha", 255));
 	}
 	
 	void updateTextColor()
@@ -159,41 +218,39 @@ public class TextSettings extends Activity
 		dialog.show();
 		
 	}
-	
-	void disableFontComponents()
-	{
-		SeekBar sb = (SeekBar)findViewById(R.id.sbTimeSize);
-		sb.setEnabled(false);
-		
-		sb = (SeekBar)findViewById(R.id.sbDateSize);
-		sb.setEnabled(false);
-		
-		TextView title = (TextView) findViewById(R.id.lTypeface);
-		title.setText(R.string.text_fonterror);
-		
-		Spinner typeface = (Spinner) findViewById(R.id.sTypeface);
-		typeface.setEnabled(false);
-	}
-	
+
 	@Override
 	protected void onPause() 
 	{
 		ToggleButton leadZero = (ToggleButton)findViewById(R.id.tbLeadingZero);
 		ToggleButton dateEn = (ToggleButton)findViewById(R.id.tbDateEnabled);
+		ToggleButton shadowEn = (ToggleButton)findViewById(R.id.tbShadowEnabled);
+		ToggleButton twentyFourEn = (ToggleButton)findViewById(R.id.tb24Hour);
+		ToggleButton marker = (ToggleButton)findViewById(R.id.tbMarkerEnabled);
+		SeekBar bgAlpha = (SeekBar)findViewById(R.id.sbBgAlpha);
+		SeekBar textAlpha = (SeekBar)findViewById(R.id.sbTextAlpha);
 		
 		Spinner typeface = (Spinner)findViewById(R.id.sTypeface);
-		m_typeface = typeFaces[typeface.getSelectedItemPosition()];
+		m_typeface = m_fontInfoList.get(typeface.getSelectedItemPosition()).Location;
 		
 		SharedPreferences prefs = getSharedPreferences(SimpleClockWidget.PREFS_NAME, 0);
 		SharedPreferences.Editor ed = prefs.edit();
 		
 		ed.putInt("textColor", m_textColor );
+		
 		ed.putBoolean("leadingZero", leadZero.isChecked());
 		ed.putBoolean("dateEnabled", dateEn.isChecked());
+		ed.putBoolean("twelvehour", !twentyFourEn.isChecked());
+		ed.putBoolean("shadowEnabled", shadowEn.isChecked());
+		ed.putBoolean("amPmMarkerEnabled", marker.isChecked());
+		
 		ed.putString("typeface", m_typeface);
 		
 		ed.putFloat("textTimeSize", m_timeSize);
 		ed.putFloat("textDateSize", m_dateSize);
+		
+		ed.putInt("bgAlpha", bgAlpha.getProgress());
+		ed.putInt("textAlpha", textAlpha.getProgress());
 		
 		ed.putBoolean("invalidate", true);
 		

@@ -18,8 +18,7 @@ public class SimpleClockWidget extends AppWidgetProvider
 	
 	@Override
 	public void onReceive(Context context, Intent intent) 
-	{		
-		UpdateFunctions.SetTwelve(context, false);		
+	{
 		UpdateFunctions.Invalidate(context);
 
 		context.startService(new Intent(context, SimpleClockUpdateService.class));
@@ -45,6 +44,7 @@ public class SimpleClockWidget extends AppWidgetProvider
  	@Override
  	public void onEnabled(Context context) 
  	{
+ 		UpdateFunctions.SetTwelve(context, false);
  		UpdateFunctions.Invalidate(context);
  		UpdateFunctions.LaunchSettingsApp(context);
 

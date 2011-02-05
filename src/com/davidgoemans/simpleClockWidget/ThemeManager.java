@@ -11,33 +11,33 @@ import android.util.Log;
 
 public class ThemeManager 
 {
-	public int[][] OfflineThemesLayoutMap = 
+	public int[] OfflineThemes = 
 	{ 
-			{ R.layout.main, R.drawable.widget_bg }, // 0
-			{ R.layout.white, R.drawable.widget_bg_white }, // 1
-			{ R.layout.velvet, R.drawable.widget_bg_velvet }, // 2
-			{ R.layout.pink, R.drawable.widget_bg_pink }, // 3
-			{ R.layout.blue, R.drawable.widget_bg_blue }, // 4
-			{ R.layout.red, R.drawable.widget_bg_red }, // 5
-			{ R.layout.green, R.drawable.widget_bg_green }, // 6
-			{ R.layout.ghost, R.drawable.widget_bg_ghost }, // 7
-			{ R.layout.dutch, R.drawable.widget_bg_dutch }, // 8
-			{ R.layout.orange, R.drawable.widget_bg_orange }, // 9
-			{ R.layout.clear_black, R.drawable.blank }, // 10
-			{ -1, R.drawable.blank }, // 11
-			{ R.layout.yellow, R.drawable.widget_bg_yellow }, // 12
-			{ R.layout.gold, R.drawable.widget_bg_gold }, // 13
-			{ R.layout.purple, R.drawable.widget_bg_purple }, // 14
-			{ -1, R.drawable.widget_solid_white }, // 15
-			{ -1, R.drawable.widget_solid_black }, // 16
-			{ -1, R.drawable.widget_cloud }, // 17
-			{ -1, R.drawable.widget_cubism_white }, // 18
-			{ -1, R.drawable.metal_pill }, // 19
-			{ -1, R.drawable.speech }, // 20
-			{ -1, R.drawable.chip }, // 21
-			{ -1, R.drawable.external_digimetal }, // 22
-			{ -1, R.drawable.external_digipool }, // 23
-			{ -1, R.drawable.external_digisage } // 24
+			R.drawable.widget_bg, // 0
+			R.drawable.widget_bg_white, // 1
+			R.drawable.widget_bg_velvet, // 2
+			R.drawable.widget_bg_pink, // 3
+			R.drawable.widget_bg_blue, // 4
+			R.drawable.widget_bg_red, // 5
+			R.drawable.widget_bg_green, // 6
+			R.drawable.widget_bg_ghost, // 7
+			R.drawable.widget_bg_dutch, // 8
+			R.drawable.widget_bg_orange, // 9
+			R.drawable.blank, // 10
+			R.drawable.blank, // 11
+			R.drawable.widget_bg_yellow, // 12
+			R.drawable.widget_bg_gold, // 13
+			R.drawable.widget_bg_purple, // 14
+			R.drawable.widget_solid_white, // 15
+			R.drawable.widget_solid_black, // 16
+			R.drawable.widget_cloud, // 17
+			R.drawable.widget_cubism_white, // 18
+			R.drawable.metal_pill, // 19
+			R.drawable.speech, // 20
+			R.drawable.chip, // 21
+			R.drawable.external_digimetal, // 22
+			R.drawable.external_digipool, // 23
+			R.drawable.external_digisage // 24
 	};
 
 	Lock listLock;
@@ -63,6 +63,8 @@ public class ThemeManager
 	
 	private Context context;
 	
+	private boolean terminatePending = false;
+	
 	private boolean themesPopulated = false;
 	
 	public boolean IsPopulatingComplete()
@@ -75,6 +77,13 @@ public class ThemeManager
 		themes = new ArrayList<DigiTheme>();
 		listeners = new ArrayList<IThemeListListener>();
 		listLock = new ReentrantLock();
+		
+		terminatePending = false;
+	}
+	
+	public void terminate()
+	{
+		terminatePending = true;
 	}
 		
 	public void populateThemes(Context context, IThemeListListener listener) 
@@ -87,15 +96,14 @@ public class ThemeManager
 		String[] names = context.getResources().getStringArray(R.array.colors);
 
 		int i = 0;
-		for (int[] layoutImagePair : OfflineThemesLayoutMap) 
+		for (int themeImage: OfflineThemes) 
 		{
 			String creator = "David Goemans";
 			if (i >= 22)
 				creator = "L. Baker";
 
 			DigiTheme theme = new DigiTheme(names[i], creator);
-			theme.LayoutResourceID = layoutImagePair[0];
-			theme.ImageResourceID = layoutImagePair[1];
+			theme.ImageResourceID = themeImage;
 
 			themes.add(theme);
 			i++;
@@ -149,17 +157,21 @@ public class ThemeManager
 				themesPopulated = true;
 			
 			notfiyListeners();
-			
-			if(!getCurrentImage())
+		
+			if(!terminatePending)
 			{
-				listeners.clear();
+				if(!getCurrentImage())
+					listeners.clear();
 			}
 			break;
 		case GetOnlineList:
 			Log.d("DigiClock", "List Task Done");
 			notfiyListeners();
 			currentTask = Task.GetImage;
-			getCurrentImage();
+			if(!terminatePending)
+			{
+				getCurrentImage();
+			}
 			break;
 		}
 	}
@@ -224,7 +236,7 @@ public class ThemeManager
 			currentTaskFinished = true;
 			listLock.unlock();
 			
-			Log.d("DigiClock", "List of online themes retrieved");
+			Log.d("DigiClock", "List of online themes retrieved: " + onlineThemes.size());
 			
 			super.run();
 		}
