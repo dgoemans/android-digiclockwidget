@@ -1,14 +1,11 @@
 package com.davidgoemans.simpleClockWidget;
 
-import android.app.PendingIntent;
-import android.app.PendingIntent.CanceledException;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 
-public class SimpleClockWidgetTwelve extends AppWidgetProvider 
+public class SimpleClockWidgetLarge extends AppWidgetProvider 
 {
 	@Override
 	public void onReceive(Context context, Intent intent) 
